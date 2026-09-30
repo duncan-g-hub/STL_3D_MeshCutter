@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="MeshCutter.App/MeshCutter.App.csproj" />
+  <Project Path="MeshCutter.Core/MeshCutter.Core.csproj" />
+</Solution>
