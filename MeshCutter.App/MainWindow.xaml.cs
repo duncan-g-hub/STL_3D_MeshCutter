@@ -8,7 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using g3;
 using MeshCutter.Core;
 
 namespace MeshCutter.App;
@@ -22,15 +22,25 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         
-        var newVolume = new PrintVolume(220, 220, 250);
-        MessageBox.Show($"Volume créé : {newVolume.Volume}mm³");
-        try
-        {
-            var errorVolume = new PrintVolume(-5, 220, 250);
-        }
-        catch (ArgumentOutOfRangeException e)
-        {
-            MessageBox.Show($"Erreur : {e.Message}");
-        }
+        // var newVolume = new PrintVolume(220, 220, 250);
+        // MessageBox.Show($"Volume créé : {newVolume.Volume}mm³");
+        // try
+        // {
+        //     var errorVolume = new PrintVolume(-5, 220, 250);
+        // }
+        // catch (ArgumentOutOfRangeException e)
+        // {
+        //     MessageBox.Show($"Erreur : {e.Message}");
+        // }
+
+        var (result, mesh) = Exploration.ReadFile();
+        MessageBox.Show($"code : {result.code} ; message : {result.message}");
+
+        if (result.code == IOCode.Ok && mesh != null)
+            {
+                MessageBox.Show($"Sommets : {mesh.VertexCount}, triangles : {mesh.TriangleCount}");
+            }
     }
+
+
 }
