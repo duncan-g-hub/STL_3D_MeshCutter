@@ -9,7 +9,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using g3;
+using HelixToolkit;
+using HelixToolkit.Wpf;
 using MeshCutter.Core;
+using System.Windows.Media.Media3D;
 
 namespace MeshCutter.App;
 
@@ -33,13 +36,14 @@ public partial class MainWindow : Window
         //     MessageBox.Show($"Erreur : {e.Message}");
         // }
 
+        // HelixViewport3D
+
         var (result, mesh) = Exploration.ReadFile();
         MessageBox.Show($"code : {result.code} ; message : {result.message}");
-
+        
         if (result.code == IOCode.Ok && mesh != null)
             {
                 MessageBox.Show($"Sommets : {mesh.VertexCount}, triangles : {mesh.TriangleCount}");
-
                 var bounds = mesh.GetBounds();
 
                 // coordonnés des bornes + volume au sein de la boite englobante 
@@ -56,5 +60,38 @@ public partial class MainWindow : Window
                     MessageBox.Show("Le volume est ouvert, impossible de continuer...");
                 }
             }
+    }
+}
+
+
+class Converter
+{
+    public static MeshGeometry3D MeshConverter(DMesh3 mesh)
+    {
+        // gestion sommets
+        IList<Point3D> positions = new List<Point3D>();
+        IDictionary<int,int> indexMap = new Dictionary<int,int>();
+
+        foreach (int i in mesh.VertexIndices())
+        {
+            indexMap.Add(i, positions.Count);
+            var v = mesh.GetVertex(i);
+            positions.Add(new Point3D(v.x, v.y, v.z));
+        }
+
+        // gestion triangles 
+        IList<int> triangleIndices = new List<int>();
+        foreach (int i in mesh.TriangleIndices())
+        {            
+            var t = mesh.GetTriangle(i);
+            triangleIndices.Add(indexMap[t.a]); triangleIndices.Add(indexMap[t.b]); triangleIndices.Add(indexMap[t.c]);
+        }
+
+        // nouveau mesh convertit
+        var convertedPositions = new Point3DCollection(positions);
+        var convertedTriangles = new Int32Collection(triangleIndices);
+        var convertedMesh = new MeshGeometry3D{Positions=convertedPositions, TriangleIndices=convertedTriangles};
+        
+        return convertedMesh;
     }
 }
