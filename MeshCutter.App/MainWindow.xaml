@@ -13,10 +13,21 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
         
-        <Button Content="Open File" Click="OpenFileButton_Click" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,10" Height="25"/>
+        <Button Content="Open File" Click="OpenFileButton_Click" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Margin="0,0,0,10" Height="25"/>
+
+        <Border Grid.Row="1" Grid.Column="1" Background="#D9D9D9" Margin="10 2 2 2" BorderBrush="#6B6B6B" BorderThickness="1" CornerRadius="2">
+            <StackPanel>
+                <TextBlock x:Name="ModelInfos" TextAlignment="Left" Margin="5,10" TextWrapping="Wrap">Informations : </TextBlock>
+            </StackPanel>
+        </Border>
         
-        <helix:HelixViewport3D x:Name="Visualizer3D" Grid.Row="1">
+        <helix:HelixViewport3D x:Name="Visualizer3D" Grid.Row="1" Grid.Column="0">
             <helix:DefaultLights/>
             <!-- <helix:BoxVisual3D Length="60" Width="30" Height="90" Center="0,0,0">
             </helix:BoxVisual3D> -->

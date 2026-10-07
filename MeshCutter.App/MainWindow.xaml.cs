@@ -37,28 +37,6 @@ public partial class MainWindow : Window
         // {
         //     MessageBox.Show($"Erreur : {e.Message}");
         // }
-
-        // HelixViewport3D
-
-
-
-
-        // MessageBox.Show($"Sommets : {mesh.VertexCount}, triangles : {mesh.TriangleCount}");
-        // var bounds = mesh.GetBounds();
-
-        // // coordonnés des bornes + volume au sein de la boite englobante 
-        // MessageBox.Show($"Boite englobante : longueur (x) : {bounds.Width}mm; hauteur (y) : {bounds.Height}mm; profondeur (z) : {bounds.Depth}mm ; volume : {bounds.Volume}mm³");
-        
-        // if (mesh.IsClosed())
-        // {
-        //     MessageBox.Show("Le volume est fermé !");
-        //     var measures = MeshMeasurements.VolumeArea(mesh, mesh.TriangleIndices(), i => mesh.GetVertex(i));
-        //     MessageBox.Show($"Volume : {measures[0]}mm³ ; superficie : {measures[1]}mm²");
-        // }
-        // else
-        // {
-        //     MessageBox.Show("Le volume est ouvert, impossible de continuer...");
-        // }
     }
   
 
@@ -75,7 +53,7 @@ public partial class MainWindow : Window
 
     private void ReadSTLFile(string path)
     {
-        var (result, mesh) = Exploration.ReadFile(path);
+        var (result, mesh) = MeshLoader.GetMeshFromSTLFile(path);
         if (result.code == IOCode.Ok && mesh != null)
         {
             DisplayModel(mesh);
@@ -91,14 +69,35 @@ public partial class MainWindow : Window
     {
         var myModel = Converter.MeshConverter(mesh);
         DisplayedModel.MeshGeometry = myModel;
+        DisplayModelInfos(mesh);
         ZoomToModel(mesh);
     }
 
-        private void ZoomToModel(DMesh3 mesh)
+    private void ZoomToModel(DMesh3 mesh)
     {
         var b = mesh.GetBounds();
         var rect3d = new Rect3D(b.Min.x, b.Min.y, b.Min.z, b.Width, b.Height, b.Depth);
         Visualizer3D.ZoomExtents(rect3d);
+    }
+
+    private void DisplayModelInfos(DMesh3 mesh)
+    {
+        var m = MeshInfo.GetMeshInfo(mesh);
+
+        ModelInfos.Text = @$"Informations : 
+
+{m.IsClosed}
+
+Nombre de sommets : {m.VertexCount}
+Nombre de triangles : {m.TriangleCount}
+
+Longueur (x) : {m.SizeX}mm
+Hauteur (y) : {m.SizeY}mm
+Profondeur (z) : {m.SizeZ}mm
+
+Superficie : {m.Area}mm²
+Volume : {m.Volume}mm³
+";
     }
 }
 
