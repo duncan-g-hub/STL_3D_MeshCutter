@@ -40,28 +40,37 @@ public partial class MainWindow : Window
 
         var (result, mesh) = Exploration.ReadFile();
         MessageBox.Show($"code : {result.code} ; message : {result.message}");
-        
+
         if (result.code == IOCode.Ok && mesh != null)
             {
-                MessageBox.Show($"Sommets : {mesh.VertexCount}, triangles : {mesh.TriangleCount}");
-                var bounds = mesh.GetBounds();
+                var myModel = Converter.MeshConverter(mesh);
+                DisplayedModel.MeshGeometry = myModel;
 
-                // coordonnés des bornes + volume au sein de la boite englobante 
-                MessageBox.Show($"Boite englobante : longueur (x) : {bounds.Width}mm; hauteur (y) : {bounds.Height}mm; profondeur (z) : {bounds.Depth}mm ; volume : {bounds.Volume}mm³");
+
+                // MessageBox.Show($"Sommets : {mesh.VertexCount}, triangles : {mesh.TriangleCount}");
+                // var bounds = mesh.GetBounds();
+
+                // // coordonnés des bornes + volume au sein de la boite englobante 
+                // MessageBox.Show($"Boite englobante : longueur (x) : {bounds.Width}mm; hauteur (y) : {bounds.Height}mm; profondeur (z) : {bounds.Depth}mm ; volume : {bounds.Volume}mm³");
                 
-                if (mesh.IsClosed())
-                {
-                    MessageBox.Show("Le volume est fermé !");
-                    var measures = MeshMeasurements.VolumeArea(mesh, mesh.TriangleIndices(), i => mesh.GetVertex(i));
-                    MessageBox.Show($"Volume : {measures[0]}mm³ ; superficie : {measures[1]}mm²");
-                }
-                else
-                {
-                    MessageBox.Show("Le volume est ouvert, impossible de continuer...");
-                }
+                // if (mesh.IsClosed())
+                // {
+                //     MessageBox.Show("Le volume est fermé !");
+                //     var measures = MeshMeasurements.VolumeArea(mesh, mesh.TriangleIndices(), i => mesh.GetVertex(i));
+                //     MessageBox.Show($"Volume : {measures[0]}mm³ ; superficie : {measures[1]}mm²");
+                // }
+                // else
+                // {
+                //     MessageBox.Show("Le volume est ouvert, impossible de continuer...");
+                // }
             }
     }
-}
+
+    // private void GetSTLPath(object sender, RoutedEventArgs e)
+    // {
+    //     Button clickedButton = (Button)sender;
+    // }
+}    
 
 
 class Converter

@@ -8,10 +8,32 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     
-    <Grid>
-        <helix:HelixViewport3D>
-            <helix:BoxVisual3D Length="60" Width="30" Height="90" Center="0,0,0">
-            </helix:BoxVisual3D>
-        </helix:HelixViewport3D>
+    <Grid Margin="10">
+        <!-- <Grid.RowDefinitions>
+            <RowDefinition Height=""/>
+            <RowDefinition Height=""/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=""/>
+            <ColumnDefinition Width=""/>
+        </Grid.ColumnDefinitions>
+
+
+
+
+        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"> -->
+            <helix:HelixViewport3D x:Name="Visualizer3D" ZoomExtentsWhenLoaded="true">
+                <helix:DefaultLights>
+                    <!-- <helix:BoxVisual3D Length="60" Width="30" Height="90" Center="0,0,0">
+                    </helix:BoxVisual3D> -->
+
+                    <helix:MeshGeometryVisual3D x:Name="DisplayedModel" />
+
+
+                </helix:DefaultLights>
+            </helix:HelixViewport3D>
+        <!-- </Border> -->
+
     </Grid>
 </Window>
