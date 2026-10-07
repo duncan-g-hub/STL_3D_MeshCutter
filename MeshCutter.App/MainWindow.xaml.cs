@@ -39,7 +39,6 @@ public partial class MainWindow : Window
         // }
     }
   
-
     private void OpenFileButton_Click(object sender, RoutedEventArgs e)
     {
         var fileDialog = new OpenFileDialog();
@@ -63,7 +62,6 @@ public partial class MainWindow : Window
             MessageBox.Show($"code : {result.code} ; message : {result.message}");
         }
     }
-
 
     private void DisplayModel(DMesh3 mesh)
     {
@@ -89,25 +87,30 @@ public partial class MainWindow : Window
 Nombre de sommets : {m.VertexCount}
 Nombre de triangles : {m.TriangleCount}
 
-Longueur (x) : {m.SizeX}mm
-Hauteur (y) : {m.SizeY}mm
-Profondeur (z) : {m.SizeZ}mm
+Longueur (x) : {RoundedValue(m.SizeX)}mm
+Hauteur (y) : {RoundedValue(m.SizeY)}mm
+Profondeur (z) : {RoundedValue(m.SizeZ)}mm
 
-Superficie : {m.Area}mm²
+Superficie : {RoundedValue(m.Area)}mm²
 Volume : {DisplayVolume(m)}
 ";
     }
 
     private string DisplayVolume(MeshInfo meshInfo)
     {
-        if (meshInfo.IsClosed)
+        if (meshInfo.IsClosed && meshInfo.Volume != null)
         {
-            return $"{meshInfo.Volume}mm³";
+            return $"{RoundedValue(meshInfo.Volume.Value)}mm³";
         }
         else
         {
-            return "Volume non disponible : le modèle est ouvert.";
+            return "Volume non disponible, le modèle est ouvert.";
         }
+    }
+
+    private double RoundedValue(double value)
+    {
+        return Math.Round(value, 2);
     }
 }
 
