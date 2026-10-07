@@ -10,19 +10,18 @@
     
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
         
-        <Button Content="Open File" Click="GetSTLFilePath" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,10" Height="25"/>
+        <Button Content="Open File" Click="OpenFileButton_Click" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,10" Height="25"/>
         
-        <helix:HelixViewport3D x:Name="Visualizer3D" ZoomExtentsWhenLoaded="true" Grid.Row="1">
-            <helix:DefaultLights>
-                <!-- <helix:BoxVisual3D Length="60" Width="30" Height="90" Center="0,0,0">
-                </helix:BoxVisual3D> -->
+        <helix:HelixViewport3D x:Name="Visualizer3D" Grid.Row="1">
+            <helix:DefaultLights/>
+            <!-- <helix:BoxVisual3D Length="60" Width="30" Height="90" Center="0,0,0">
+            </helix:BoxVisual3D> -->
 
-                <helix:MeshGeometryVisual3D x:Name="DisplayedModel" />
-            </helix:DefaultLights>
+            <helix:MeshGeometryVisual3D x:Name="DisplayedModel" />
         </helix:HelixViewport3D>
     </Grid>
 </Window>

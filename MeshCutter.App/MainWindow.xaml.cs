@@ -62,10 +62,10 @@ public partial class MainWindow : Window
     }
   
 
-    private void GetSTLFilePath(object sender, RoutedEventArgs e)
+    private void OpenFileButton_Click(object sender, RoutedEventArgs e)
     {
         var fileDialog = new OpenFileDialog();
-        fileDialog.Filter = "STL files (*.STL)|*.STL";
+        fileDialog.Filter = "STL files (*.STL)|*.STL|All files (*.*)|*.*";
         if(fileDialog.ShowDialog() == true)
         {
             string STLPath = fileDialog.FileName;
@@ -76,10 +76,13 @@ public partial class MainWindow : Window
     private void ReadSTLFile(string path)
     {
         var (result, mesh) = Exploration.ReadFile(path);
-        MessageBox.Show($"code : {result.code} ; message : {result.message}");
         if (result.code == IOCode.Ok && mesh != null)
         {
             DisplayModel(mesh);
+        }
+        else
+        {
+            MessageBox.Show($"code : {result.code} ; message : {result.message}");
         }
     }
 
@@ -88,10 +91,10 @@ public partial class MainWindow : Window
     {
         var myModel = Converter.MeshConverter(mesh);
         DisplayedModel.MeshGeometry = myModel;
-        CenterModel(mesh);
+        ZoomToModel(mesh);
     }
 
-        private void CenterModel(DMesh3 mesh)
+        private void ZoomToModel(DMesh3 mesh)
     {
         var b = mesh.GetBounds();
         var rect3d = new Rect3D(b.Min.x, b.Min.y, b.Min.z, b.Width, b.Height, b.Depth);
