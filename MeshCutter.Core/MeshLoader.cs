@@ -5,7 +5,7 @@ public class MeshLoader
     public static (IOReadResult Result, DMesh3? Mesh) GetMeshFromSTLFile(string path)
     {
         var meshBuilder = new DMesh3Builder();
-        var result = StandardMeshReader.ReadFile(@$"{path}", ReadOptions.Defaults, meshBuilder);
+        var result = StandardMeshReader.ReadFile(path, ReadOptions.Defaults, meshBuilder);
         if (meshBuilder.Meshes.Count > 0)
         {
             return (result, meshBuilder.Meshes[0]);
