@@ -1,8 +1,8 @@
 using g3;
 
-public class Exploration
+public class MeshLoader
 {
-    public static (IOReadResult Result, DMesh3? Mesh) ReadFile(string path)
+    public static (IOReadResult Result, DMesh3? Mesh) GetMeshFromSTLFile(string path)
     {
         var meshBuilder = new DMesh3Builder();
         var result = StandardMeshReader.ReadFile(@$"{path}", ReadOptions.Defaults, meshBuilder);
