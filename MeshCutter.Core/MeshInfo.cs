@@ -5,14 +5,26 @@ using g3;
 
 public class MeshInfo
 {   
-    public int VertexCount {get; set;}
-    public int TriangleCount {get; set;}
-    public double SizeX {get; set;}
-    public double SizeY {get; set;}
-    public double SizeZ {get; set;}
-    public double? Area {get; set;}
-    public double? Volume {get; set;}
-    public bool IsClosed {get; set;}
+    public int VertexCount {get;}
+    public int TriangleCount {get;}
+    public double SizeX {get;}
+    public double SizeY {get;}
+    public double SizeZ {get;}
+
+    //voir pour modifier les get pour personnaliser un message si = null 
+    public double? Area {get;}
+    public double? Volume {get;}
+    public bool IsClosed {get;}
+
+public string AreaDisplay =>
+    !IsClosed
+        ? "Surface non disponible : le modèle est ouvert."
+        : Area?.ToString() ?? "Surface inconnue.";
+
+public string VolumeDisplay =>
+    !IsClosed
+        ? "Volume non disponible : le modèle est ouvert."
+        : Volume?.ToString() ?? "Volume inconnu.";
 
     public MeshInfo(int vertexCount, int triangleCount, double sizeX, double sizeY, double sizeZ, double? area, double? volume, bool isClosed)
     {
@@ -26,10 +38,6 @@ public class MeshInfo
         IsClosed = isClosed;
     }
 
-    
-
-
-
     public static MeshInfo GetMeshInfo(DMesh3 mesh)
     {
         int vertexCount = mesh.VertexCount;
@@ -38,7 +46,6 @@ public class MeshInfo
         double sizeX = bounds.Width;
         double sizeY = bounds.Height;
         double sizeZ = bounds.Depth;
-
         bool meshIsClosed = mesh.IsClosed();
         if (meshIsClosed)
         {
@@ -51,11 +58,5 @@ public class MeshInfo
         {
             return new MeshInfo(vertexCount, triangleCount, sizeX, sizeY, sizeZ, null, null, meshIsClosed);
         }
-
-        
-
-        
-
-        
     }
 }

@@ -95,8 +95,8 @@ Longueur (x) : {m.SizeX}mm
 Hauteur (y) : {m.SizeY}mm
 Profondeur (z) : {m.SizeZ}mm
 
-Superficie : {m.Area}mm²
-Volume : {m.Volume}mm³
+Superficie : {m.AreaDisplay}mm²
+Volume : {m.VolumeDisplay}mm³
 ";
     }
 }
