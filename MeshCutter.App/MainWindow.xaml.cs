@@ -13,6 +13,8 @@ using HelixToolkit;
 using HelixToolkit.Wpf;
 using MeshCutter.Core;
 using System.Windows.Media.Media3D;
+using Microsoft.Win32;
+using System.IO;
 
 namespace MeshCutter.App;
 
@@ -38,40 +40,64 @@ public partial class MainWindow : Window
 
         // HelixViewport3D
 
-        var (result, mesh) = Exploration.ReadFile();
-        MessageBox.Show($"code : {result.code} ; message : {result.message}");
-
-        if (result.code == IOCode.Ok && mesh != null)
-            {
-                var myModel = Converter.MeshConverter(mesh);
-                DisplayedModel.MeshGeometry = myModel;
 
 
-                // MessageBox.Show($"Sommets : {mesh.VertexCount}, triangles : {mesh.TriangleCount}");
-                // var bounds = mesh.GetBounds();
 
-                // // coordonnés des bornes + volume au sein de la boite englobante 
-                // MessageBox.Show($"Boite englobante : longueur (x) : {bounds.Width}mm; hauteur (y) : {bounds.Height}mm; profondeur (z) : {bounds.Depth}mm ; volume : {bounds.Volume}mm³");
-                
-                // if (mesh.IsClosed())
-                // {
-                //     MessageBox.Show("Le volume est fermé !");
-                //     var measures = MeshMeasurements.VolumeArea(mesh, mesh.TriangleIndices(), i => mesh.GetVertex(i));
-                //     MessageBox.Show($"Volume : {measures[0]}mm³ ; superficie : {measures[1]}mm²");
-                // }
-                // else
-                // {
-                //     MessageBox.Show("Le volume est ouvert, impossible de continuer...");
-                // }
-            }
+        // MessageBox.Show($"Sommets : {mesh.VertexCount}, triangles : {mesh.TriangleCount}");
+        // var bounds = mesh.GetBounds();
+
+        // // coordonnés des bornes + volume au sein de la boite englobante 
+        // MessageBox.Show($"Boite englobante : longueur (x) : {bounds.Width}mm; hauteur (y) : {bounds.Height}mm; profondeur (z) : {bounds.Depth}mm ; volume : {bounds.Volume}mm³");
+        
+        // if (mesh.IsClosed())
+        // {
+        //     MessageBox.Show("Le volume est fermé !");
+        //     var measures = MeshMeasurements.VolumeArea(mesh, mesh.TriangleIndices(), i => mesh.GetVertex(i));
+        //     MessageBox.Show($"Volume : {measures[0]}mm³ ; superficie : {measures[1]}mm²");
+        // }
+        // else
+        // {
+        //     MessageBox.Show("Le volume est ouvert, impossible de continuer...");
+        // }
+    }
+  
+
+    private void GetSTLFilePath(object sender, RoutedEventArgs e)
+    {
+        var fileDialog = new OpenFileDialog();
+        fileDialog.Filter = "STL files (*.STL)|*.STL";
+        if(fileDialog.ShowDialog() == true)
+        {
+            string STLPath = fileDialog.FileName;
+            ReadSTLFile(STLPath);
+        }
     }
 
-    // private void GetSTLPath(object sender, RoutedEventArgs e)
-    // {
-    //     Button clickedButton = (Button)sender;
-    // }
-}    
+    private void ReadSTLFile(string path)
+    {
+        var (result, mesh) = Exploration.ReadFile(path);
+        MessageBox.Show($"code : {result.code} ; message : {result.message}");
+        if (result.code == IOCode.Ok && mesh != null)
+        {
+            DisplayModel(mesh);
+        }
+    }
 
+
+    private void DisplayModel(DMesh3 mesh)
+    {
+        var myModel = Converter.MeshConverter(mesh);
+        DisplayedModel.MeshGeometry = myModel;
+        CenterModel(mesh);
+    }
+
+        private void CenterModel(DMesh3 mesh)
+    {
+        var b = mesh.GetBounds();
+        var rect3d = new Rect3D(b.Min.x, b.Min.y, b.Min.z, b.Width, b.Height, b.Depth);
+        Visualizer3D.ZoomExtents(rect3d);
+    }
+}
 
 class Converter
 {
