@@ -86,8 +86,6 @@ public partial class MainWindow : Window
 
         ModelInfos.Text = @$"Informations : 
 
-{m.IsClosed}
-
 Nombre de sommets : {m.VertexCount}
 Nombre de triangles : {m.TriangleCount}
 
@@ -95,9 +93,21 @@ Longueur (x) : {m.SizeX}mm
 Hauteur (y) : {m.SizeY}mm
 Profondeur (z) : {m.SizeZ}mm
 
-Superficie : {m.AreaDisplay}mm²
-Volume : {m.VolumeDisplay}mm³
+Superficie : {m.Area}mm²
+Volume : {DisplayVolume(m)}
 ";
+    }
+
+    private string DisplayVolume(MeshInfo meshInfo)
+    {
+        if (meshInfo.IsClosed)
+        {
+            return $"{meshInfo.Volume}mm³";
+        }
+        else
+        {
+            return "Volume non disponible : le modèle est ouvert.";
+        }
     }
 }
 
