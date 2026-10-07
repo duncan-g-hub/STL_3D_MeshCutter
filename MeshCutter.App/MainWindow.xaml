@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MeshCutter.App"
         xmlns:helix="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
         mc:Ignorable="d"
-        Title="MeshCutter" Height="500" Width="800" MinHeight="500" MinWidth="600">
+        Title="MeshCutter" Height="550" Width="800" MinHeight="550" MinWidth="600">
     
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -16,7 +16,7 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         
         <Button Content="Open File" Click="OpenFileButton_Click" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Margin="0,0,0,10" Height="25"/>

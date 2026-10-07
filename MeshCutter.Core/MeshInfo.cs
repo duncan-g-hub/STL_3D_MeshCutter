@@ -38,13 +38,6 @@ public class MeshInfo
         var measures = MeshMeasurements.VolumeArea(mesh, mesh.TriangleIndices(), i => mesh.GetVertex(i));
         double area = measures[1];
         double volume = measures[0]; 
-        if (meshIsClosed)
-        {
-            return new MeshInfo(vertexCount, triangleCount, sizeX, sizeY, sizeZ, area, volume, meshIsClosed);
-        }
-        else
-        {
-            return new MeshInfo(vertexCount, triangleCount, sizeX, sizeY, sizeZ, area, null, meshIsClosed);
-        }
+        return new MeshInfo(vertexCount, triangleCount, sizeX, sizeY, sizeZ, area, meshIsClosed? volume : null, meshIsClosed);
     }
 }
