@@ -15,15 +15,16 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         
         <Button Content="Open File" Click="OpenFileButton_Click" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Margin="0,0,0,10" Height="25"/>
+        <TextBlock Text="{Binding ErrorMessage}" Grid.Row="0" Grid.Column="1" TextAlignment="Left" Margin="5,10" TextWrapping="Wrap"/>
 
         <Border Grid.Row="1" Grid.Column="1" Background="#D9D9D9" Margin="10 2 2 2" BorderBrush="#6B6B6B" BorderThickness="1" CornerRadius="2">
             <StackPanel>
-                <TextBlock x:Name="ModelInfos" TextAlignment="Left" Margin="5,10" TextWrapping="Wrap">Informations : </TextBlock>
+                <TextBlock Text="{Binding Informations}" TextAlignment="Left" Margin="5,10" TextWrapping="Wrap"/>
             </StackPanel>
         </Border>
         
@@ -32,7 +33,7 @@
             <!-- <helix:BoxVisual3D Length="60" Width="30" Height="90" Center="0,0,0">
             </helix:BoxVisual3D> -->
 
-            <helix:MeshGeometryVisual3D x:Name="DisplayedModel" />
+            <helix:MeshGeometryVisual3D MeshGeometry="{Binding Mesh}" />
         </helix:HelixViewport3D>
     </Grid>
 </Window>
