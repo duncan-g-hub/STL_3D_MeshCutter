@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="MeshCutter.App/MeshCutter.App.csproj" />
   <Project Path="MeshCutter.Core/MeshCutter.Core.csproj" />
+  <Project Path="MeshCutter.Tests/MeshCutter.Tests.csproj" />
 </Solution>
