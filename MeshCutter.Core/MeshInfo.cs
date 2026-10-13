@@ -1,8 +1,6 @@
-using System.Dynamic;
-using System.Net.NetworkInformation;
 using g3;
 
-
+namespace MeshCutter.Core;
 public class MeshInfo
 {   
     public int VertexCount {get;}

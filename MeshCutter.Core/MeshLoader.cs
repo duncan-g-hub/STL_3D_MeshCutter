@@ -1,5 +1,6 @@
 using g3;
 
+namespace MeshCutter.Core;
 public class MeshLoader
 {
     public static (IOReadResult Result, DMesh3? Mesh) GetMeshFromSTLFile(string path)

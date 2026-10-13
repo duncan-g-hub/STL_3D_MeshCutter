@@ -3,6 +3,7 @@ using System.Windows.Media.Media3D;
 using g3;
 using CommunityToolkit.Mvvm.Input;
 using MeshCutter.App.ViewModels.Interfaces;
+using MeshCutter.Core;
 
 namespace MeshCutter.App.ViewModels;
 
