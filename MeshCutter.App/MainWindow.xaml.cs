@@ -1,33 +1,19 @@
 ﻿using System.Windows;
 using System.Windows.Media.Media3D;
-using Microsoft.Win32;
 using MeshCutter.App.ViewModels;
 using System.ComponentModel;
+using MeshCutter.App.Services;
 
 namespace MeshCutter.App;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow : Window
 {
-    private readonly MainViewModel _viewModel = new();
+    private readonly MainViewModel _viewModel = new(new WpfFileDialogService());
     public MainWindow()
     {
         InitializeComponent();
         DataContext = _viewModel;
         _viewModel.PropertyChanged += OnViewModelPropertyChanged; 
-
-        // var newVolume = new PrintVolume(220, 220, 250);
-        // MessageBox.Show($"Volume créé : {newVolume.Volume}mm³");
-        // try
-        // {
-        //     var errorVolume = new PrintVolume(-5, 220, 250);
-        // }
-        // catch (ArgumentOutOfRangeException e)
-        // {
-        //     MessageBox.Show($"Erreur : {e.Message}");
-        // }
     }
     
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -38,17 +24,6 @@ public partial class MainWindow : Window
         }
     }
   
-    private void OpenFileButton_Click(object sender, RoutedEventArgs e)
-    {
-        var fileDialog = new OpenFileDialog();
-        fileDialog.Filter = "STL files (*.STL)|*.STL|All files (*.*)|*.*";
-        if(fileDialog.ShowDialog() == true)
-        {
-            string STLPath = fileDialog.FileName;
-            _viewModel.LoadFile(STLPath);
-        }
-    }
-
     private void ZoomToModel(MeshGeometry3D? mesh)
     {
         if (mesh != null)

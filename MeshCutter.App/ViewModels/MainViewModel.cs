@@ -1,9 +1,12 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using MeshCutter.Core;
 using System.Windows.Media.Media3D;
 using g3;
+using CommunityToolkit.Mvvm.Input;
+using MeshCutter.App.ViewModels.Interfaces;
 
 namespace MeshCutter.App.ViewModels;
+
+
 public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty]
@@ -12,6 +15,23 @@ public partial class MainViewModel : ObservableObject
     private MeshGeometry3D? _mesh;
     [ObservableProperty]
     private string? _errorMessage;
+
+    private readonly IFileDialogService _fileDialogService;
+    public MainViewModel(IFileDialogService fileDialogService)
+    {
+        _fileDialogService = fileDialogService;
+    }
+
+    
+    [RelayCommand]
+    public void OpenFile()
+    {
+        var path = _fileDialogService.GetFilePath();
+        if (path != null)
+        {
+            LoadFile(path);
+        }
+    }
 
     public void LoadFile(string path)
     {
@@ -64,4 +84,12 @@ Volume : {DisplayVolume(m)}
         return Math.Round(value, 2);
     }
 }
+
+
+
+
+
+
+
+
 
