@@ -39,7 +39,7 @@ public class MainViewModelUnitTest
     }
 
     [Fact]
-    public void OpenWrongFile_WhenPathExist_SetsErrorMessage()
+    public void OpenFile_WhenFormatIsUnsupported_SetsErrorMessage()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.SLDPRT");
         MainViewModel viewModel = new(new FakeFileDialogService(path));
