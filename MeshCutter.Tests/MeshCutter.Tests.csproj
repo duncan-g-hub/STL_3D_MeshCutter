@@ -8,7 +8,7 @@
   </PropertyGroup>
 
 <ItemGroup>
-  <None Include="..\samples\cube 50mm.STL;..\samples\cube 50mm.SLDPRT">
+  <None Include="..\samples\cube 50mm.STL;..\samples\cube 50mm.SLDPRT;..\samples\cube 50mm error.STL">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     <TargetPath>samples\%(Filename)%(Extension)</TargetPath>
   </None>
