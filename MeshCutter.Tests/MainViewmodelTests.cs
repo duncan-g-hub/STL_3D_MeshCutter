@@ -48,5 +48,15 @@ public class MainViewModelUnitTest
         Assert.NotNull(viewModel.ErrorMessage);
         Assert.Equal("Informations : ", viewModel.Informations);
     }
+
+        [Fact]
+    public void OpenFile_WhenFileIsCorrupted_SetsErrorMessage()
+    {
+        MainViewModel viewModel = new(new FakeFileDialogService("Wrong Path"));
+        viewModel.OpenFile();
+        Assert.Null(viewModel.Mesh);
+        Assert.NotNull(viewModel.ErrorMessage);
+        Assert.Equal("Informations : ", viewModel.Informations);
+    }
 }
 
