@@ -16,13 +16,15 @@ public partial class MainViewModel : ObservableObject
     private MeshGeometry3D? _mesh;
     [ObservableProperty]
     private string? _errorMessage;
-
+    [ObservableProperty]
+    private double? _doubleTest;
     private readonly IFileDialogService _fileDialogService;
     public MainViewModel(IFileDialogService fileDialogService)
     {
         _fileDialogService = fileDialogService;
     }
 
+    
     
     [RelayCommand]
     public void OpenFile()

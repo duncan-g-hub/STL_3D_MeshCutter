@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:MeshCutter.App"
         xmlns:helix="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
         mc:Ignorable="d"
-        Title="MeshCutter" Height="550" Width="800" MinHeight="550" MinWidth="600">
-    
+        Title="MeshCutter" Height="550" Width="800" MinHeight="550" MinWidth="600"
+        Language="fr-FR">
+        
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -18,15 +19,21 @@
             <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
+        
         
         <Button Content="Open File" Command="{Binding OpenFileCommand}" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Margin="0,0,0,10" Height="25"/>
         <TextBlock Text="{Binding ErrorMessage}" Grid.Row="0" Grid.Column="1" TextAlignment="Left" Margin="5,10" TextWrapping="Wrap"/>
 
-        <Border Grid.Row="1" Grid.Column="1" Background="#D9D9D9" Margin="10 2 2 2" BorderBrush="#6B6B6B" BorderThickness="1" CornerRadius="2">
-            <StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <Border  Background="#D9D9D9" Margin="10 2 2 2" BorderBrush="#6B6B6B" BorderThickness="1" CornerRadius="2">
                 <TextBlock Text="{Binding Informations}" TextAlignment="Left" Margin="5,10" TextWrapping="Wrap"/>
-            </StackPanel>
-        </Border>
+            </Border>
+
+            <TextBox Text="{Binding DoubleTest}"></TextBox>
+        </StackPanel>
+
+        
         
         <helix:HelixViewport3D x:Name="Visualizer3D" Grid.Row="1" Grid.Column="0">
             <helix:DefaultLights/>
