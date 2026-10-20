@@ -17,8 +17,8 @@ public class Margins
 
     private static void ControlValue(double value, string name)
     {
-        if (value <= 0)
-            throw new ArgumentOutOfRangeException(name, $"{name} doit être supérieur à 0.");
+        if (value < 0)
+            throw new ArgumentOutOfRangeException(name, $"La marge en {name} doit être supérieur ou égale à 0.");
     }
 
 }

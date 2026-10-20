@@ -122,7 +122,7 @@ public class CutPlannerTest
         Assert.Equal(1, cutPlanner.PiecesZ);
     }
 
-        [Fact]
+    [Fact]
     public void CutMesh_WhenMeshIsBiggerOnDifferentAxesThanPrintableVolume_ReturnTwoPiecesOnXThreeonYOneOnZ()
     {
         var margins = GetFakeMargins();
@@ -134,7 +134,7 @@ public class CutPlannerTest
         Assert.Equal(3, cutPlanner.PiecesY);
         Assert.Equal(1, cutPlanner.PiecesZ);
     }
-
+    
 }
 
 
