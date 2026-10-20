@@ -7,8 +7,18 @@ public class Margins
 
     public Margins(double x, double y, double z)
     {
+        ControlValue(x, nameof(X));
         X = x;
+        ControlValue(y, nameof(Y));
         Y = y;
+        ControlValue(z, nameof(Z));
         Z = z;
     }
+
+    private static void ControlValue(double value, string name)
+    {
+        if (value <= 0)
+            throw new ArgumentOutOfRangeException(name, $"{name} doit être supérieur à 0.");
+    }
+
 }
