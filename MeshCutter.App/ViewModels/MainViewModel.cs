@@ -15,7 +15,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private MeshGeometry3D? _mesh;
     [ObservableProperty]
-    private string? _errorMessage;
+    private string? _fileErrorMessage;
 
     private readonly IFileDialogService _fileDialogService;
 
@@ -41,7 +41,8 @@ public partial class MainViewModel : ObservableObject
     private int _piecesY;
     [ObservableProperty]
     private int _piecesZ;
-    
+    [ObservableProperty]
+    private string? _printErrorMessage;
 
     public MainViewModel(IFileDialogService fileDialogService)
     {
@@ -67,11 +68,14 @@ public partial class MainViewModel : ObservableObject
                 PiecesX = cutPlanner.PiecesX;
                 PiecesY = cutPlanner.PiecesY;
                 PiecesZ = cutPlanner.PiecesZ;
-                ErrorMessage = cutPlanner.ErrorMessage;
+                PrintErrorMessage = cutPlanner.ErrorMessage;
             }
             catch (ArgumentOutOfRangeException e)
             {
-                ErrorMessage = e.Message;
+                PrintErrorMessage = e.Message;
+                PiecesX = 0;
+                PiecesY = 0;
+                PiecesZ = 0;
             }
         }
     }
@@ -94,12 +98,12 @@ public partial class MainViewModel : ObservableObject
             _meshInfo = MeshInfo.GetMeshInfo(mesh);
             Informations = GetModelInfos();
             Mesh = Converter.MeshConverter(mesh);  
-            Recalculate();      
-            ErrorMessage = null;    
+            FileErrorMessage = null;    
+            Recalculate();
         }
         else
         {
-            ErrorMessage = $"Erreur lors du chargement du fichier : \ncode : {result.code} \nmessage : {result.message}";
+            FileErrorMessage = $"Erreur lors du chargement du fichier : \ncode : {result.code} \nmessage : {result.message}";
         }
     }
 

@@ -11,7 +11,7 @@ public class MainViewModelUnitTest
         MainViewModel viewModel = new(new FakeFileDialogService(null));
         viewModel.OpenFile();
         Assert.Null(viewModel.Mesh);
-        Assert.Null(viewModel.ErrorMessage);
+        Assert.Null(viewModel.FileErrorMessage);
         Assert.Equal("Informations : ", viewModel.Informations);
     }
 
@@ -21,7 +21,7 @@ public class MainViewModelUnitTest
         MainViewModel viewModel = new(new FakeFileDialogService("Wrong Path"));
         viewModel.OpenFile();
         Assert.Null(viewModel.Mesh);
-        Assert.NotNull(viewModel.ErrorMessage);
+        Assert.NotNull(viewModel.FileErrorMessage);
         Assert.Equal("Informations : ", viewModel.Informations);
     }
 
@@ -32,7 +32,7 @@ public class MainViewModelUnitTest
         MainViewModel viewModel = new(new FakeFileDialogService(path));
         viewModel.OpenFile();
         Assert.NotNull(viewModel.Mesh);
-        Assert.Null(viewModel.ErrorMessage);
+        Assert.Null(viewModel.FileErrorMessage);
         Assert.NotEqual("Informations : ", viewModel.Informations);
         Assert.Contains("Nombre de triangles : 12", viewModel.Informations);
         Assert.Contains("Nombre de sommets : 8", viewModel.Informations);
@@ -45,7 +45,7 @@ public class MainViewModelUnitTest
         MainViewModel viewModel = new(new FakeFileDialogService(path));
         viewModel.OpenFile();
         Assert.Null(viewModel.Mesh);
-        Assert.NotNull(viewModel.ErrorMessage);
+        Assert.NotNull(viewModel.FileErrorMessage);
         Assert.Equal("Informations : ", viewModel.Informations);
     }
 
@@ -55,7 +55,7 @@ public class MainViewModelUnitTest
         MainViewModel viewModel = new(new FakeFileDialogService("Wrong Path"));
         viewModel.OpenFile();
         Assert.Null(viewModel.Mesh);
-        Assert.NotNull(viewModel.ErrorMessage);
+        Assert.NotNull(viewModel.FileErrorMessage);
         Assert.Equal("Informations : ", viewModel.Informations);
     }
 
@@ -66,9 +66,9 @@ public class MainViewModelUnitTest
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
         MainViewModel viewModel = new(new FakeFileDialogService(path));
         viewModel.OpenFile();
-        viewModel.PrintSizeX = 200;
+        viewModel.PrintSizeX = 180;
         viewModel.MarginX = 40;
-        Assert.Null(viewModel.ErrorMessage);
+        Assert.Null(viewModel.PrintErrorMessage);
         Assert.Equal(1, viewModel.PiecesX);
     }
 
@@ -80,7 +80,7 @@ public class MainViewModelUnitTest
         viewModel.OpenFile();
         viewModel.PrintSizeX = 80;
         viewModel.MarginX = 40;
-        Assert.Null(viewModel.ErrorMessage);
+        Assert.Null(viewModel.PrintErrorMessage);
         Assert.Equal(2, viewModel.PiecesX);
     }
 
@@ -92,7 +92,7 @@ public class MainViewModelUnitTest
         viewModel.OpenFile();
         viewModel.PrintSizeX = 0;
         viewModel.MarginX = 40;
-        Assert.NotNull(viewModel.ErrorMessage);
+        Assert.NotNull(viewModel.PrintErrorMessage);
     }
 
 }
