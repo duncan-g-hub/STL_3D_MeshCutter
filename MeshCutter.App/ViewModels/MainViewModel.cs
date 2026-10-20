@@ -16,15 +16,65 @@ public partial class MainViewModel : ObservableObject
     private MeshGeometry3D? _mesh;
     [ObservableProperty]
     private string? _errorMessage;
-    [ObservableProperty]
-    private double? _doubleTest;
+
     private readonly IFileDialogService _fileDialogService;
+
+    private MeshInfo? _meshInfo; 
+
+    [ObservableProperty]
+    private double _printSizeX = 200;
+    [ObservableProperty]
+    private double _printSizeY = 200;
+    [ObservableProperty]
+    private double _printSizeZ = 200;
+
+    [ObservableProperty]
+    private double _marginX = 40;
+    [ObservableProperty]
+    private double _marginY = 60;
+    [ObservableProperty]
+    private double _marginZ = 20;
+
+    [ObservableProperty]
+    private int _piecesX;
+    [ObservableProperty]
+    private int _piecesY;
+    [ObservableProperty]
+    private int _piecesZ;
+    
+
     public MainViewModel(IFileDialogService fileDialogService)
     {
         _fileDialogService = fileDialogService;
     }
 
-    
+    partial void OnPrintSizeXChanged(double value) => Recalculate();
+    partial void OnPrintSizeYChanged(double value) => Recalculate();
+    partial void OnPrintSizeZChanged(double value) => Recalculate();
+    partial void OnMarginXChanged(double value) => Recalculate();
+    partial void OnMarginYChanged(double value) => Recalculate();
+    partial void OnMarginZChanged(double value) => Recalculate();
+
+    private void Recalculate()
+    {
+        if (_meshInfo != null)
+        {
+            try
+            {
+                var margins = new Margins(MarginX, MarginY, MarginZ);
+                var printVolume = new PrintVolume(PrintSizeX, PrintSizeY, PrintSizeZ);
+                var cutPlanner = new CutPlanner(_meshInfo, printVolume, margins);
+                PiecesX = cutPlanner.PiecesX;
+                PiecesY = cutPlanner.PiecesY;
+                PiecesZ = cutPlanner.PiecesZ;
+                ErrorMessage = cutPlanner.ErrorMessage;
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                ErrorMessage = e.Message;
+            }
+        }
+    }
     
     [RelayCommand]
     public void OpenFile()
@@ -41,8 +91,10 @@ public partial class MainViewModel : ObservableObject
         var (result, mesh) = MeshLoader.GetMeshFromSTLFile(path);
         if (result.code == IOCode.Ok && mesh != null)
         {
-            Informations = GetModelInfos(mesh);
-            Mesh = Converter.MeshConverter(mesh);        
+            _meshInfo = MeshInfo.GetMeshInfo(mesh);
+            Informations = GetModelInfos();
+            Mesh = Converter.MeshConverter(mesh);  
+            Recalculate();      
             ErrorMessage = null;    
         }
         else
@@ -51,11 +103,12 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
-    private string GetModelInfos(DMesh3 mesh)
+    private string GetModelInfos()
     {
-        var m = MeshInfo.GetMeshInfo(mesh);
-
-        string modelInfos = @$"Informations : 
+        var m = _meshInfo;
+        if (m != null)
+        {
+            string modelInfos = @$"Informations : 
 
 Nombre de sommets : {m.VertexCount}
 Nombre de triangles : {m.TriangleCount}
@@ -67,7 +120,9 @@ Profondeur (z) : {RoundedValue(m.SizeZ)}mm
 Superficie : {RoundedValue(m.Area)}mm²
 Volume : {DisplayVolume(m)}
 ";
-        return modelInfos;
+            return modelInfos;
+        }
+        return "Informations : ";
     }
 
     private string DisplayVolume(MeshInfo meshInfo)

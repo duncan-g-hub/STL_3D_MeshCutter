@@ -16,6 +16,8 @@ public partial class MainWindow : Window
         _viewModel.PropertyChanged += OnViewModelPropertyChanged; 
     }
     
+    
+
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(MainViewModel.Mesh))       

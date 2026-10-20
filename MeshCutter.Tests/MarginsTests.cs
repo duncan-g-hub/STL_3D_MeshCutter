@@ -5,12 +5,30 @@ namespace MeshCutter.Tests;
 public class MarginsTests
 {
     [Fact]
-    public void Margins_WhenMarginIsUnderZero_SetsError()
+    public void Margins_WhenMarginXIsUnderZero_SetsError()
     {
         var exception = Assert.Throws<ArgumentOutOfRangeException>(
             () => new Margins(-4, 20, 20)
         );
         Assert.Equal("X", exception.ParamName);
+    }
+
+    [Fact]
+    public void Margins_WhenMarginYIsUnderZero_SetsError()
+    {
+        var exception = Assert.Throws<ArgumentOutOfRangeException>(
+            () => new Margins(20, -4, 20)
+        );
+        Assert.Equal("Y", exception.ParamName);
+    }
+
+    [Fact]
+    public void Margins_WhenMarginZIsUnderZero_SetsError()
+    {
+        var exception = Assert.Throws<ArgumentOutOfRangeException>(
+            () => new Margins(20, 20, -4)
+        );
+        Assert.Equal("Z", exception.ParamName);
     }
 
     [Fact]

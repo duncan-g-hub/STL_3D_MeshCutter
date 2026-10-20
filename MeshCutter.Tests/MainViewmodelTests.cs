@@ -49,7 +49,7 @@ public class MainViewModelUnitTest
         Assert.Equal("Informations : ", viewModel.Informations);
     }
 
-        [Fact]
+    [Fact]
     public void OpenFile_WhenFileIsCorrupted_SetsErrorMessage()
     {
         MainViewModel viewModel = new(new FakeFileDialogService("Wrong Path"));
@@ -58,5 +58,42 @@ public class MainViewModelUnitTest
         Assert.NotNull(viewModel.ErrorMessage);
         Assert.Equal("Informations : ", viewModel.Informations);
     }
+
+
+    [Fact]
+    public void CutMesh_WhenMeshSmallerThanPrintableVolume_ReturnOnePiece()
+    {
+        string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
+        MainViewModel viewModel = new(new FakeFileDialogService(path));
+        viewModel.OpenFile();
+        viewModel.PrintSizeX = 200;
+        viewModel.MarginX = 40;
+        Assert.Null(viewModel.ErrorMessage);
+        Assert.Equal(1, viewModel.PiecesX);
+    }
+
+    [Fact]
+    public void CutMesh_WhenMeshBiggerThanPrintableVolume_ReturnTwoPieces()
+    {
+        string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
+        MainViewModel viewModel = new(new FakeFileDialogService(path));
+        viewModel.OpenFile();
+        viewModel.PrintSizeX = 80;
+        viewModel.MarginX = 40;
+        Assert.Null(viewModel.ErrorMessage);
+        Assert.Equal(2, viewModel.PiecesX);
+    }
+
+    [Fact]
+    public void CutMesh_WhenPrintableVolumeEqualZero_SetsError()
+    {
+        string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
+        MainViewModel viewModel = new(new FakeFileDialogService(path));
+        viewModel.OpenFile();
+        viewModel.PrintSizeX = 0;
+        viewModel.MarginX = 40;
+        Assert.NotNull(viewModel.ErrorMessage);
+    }
+
 }
 

@@ -30,7 +30,17 @@
                 <TextBlock Text="{Binding Informations}" TextAlignment="Left" Margin="5,10" TextWrapping="Wrap"/>
             </Border>
 
-            <TextBox Text="{Binding DoubleTest}"></TextBox>
+            <TextBox  Text="{Binding PrintSizeX}"></TextBox>
+            <TextBox  Text="{Binding PrintSizeY}"></TextBox>
+            <TextBox  Text="{Binding PrintSizeZ}"></TextBox>
+
+            <TextBox  Text="{Binding MarginX}"></TextBox>
+            <TextBox  Text="{Binding MarginY}"></TextBox>
+            <TextBox  Text="{Binding MarginZ}"></TextBox>
+
+            <TextBlock  Text="{Binding PiecesX}"></TextBlock>
+            <TextBlock  Text="{Binding PiecesY}"></TextBlock>
+            <TextBlock  Text="{Binding PiecesZ}"></TextBlock>
         </StackPanel>
 
         
