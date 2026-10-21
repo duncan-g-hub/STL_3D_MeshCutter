@@ -93,7 +93,12 @@ public class MainViewModelUnitTest
         viewModel.OpenFile();
         viewModel.PrintSizeX = 0;
         viewModel.MarginX = 40;
-        Assert.NotNull(viewModel.PrintErrorMessage);
+        Assert.Equal("Axe X : l'espace de l'imprimante doit être supérieur à 0mm.",viewModel.PrintErrorMessage);
+        Assert.Equal(0, viewModel.PiecesX);
+        Assert.Equal(0, viewModel.PiecesY);
+        Assert.Equal(0, viewModel.PiecesZ);
+        viewModel.PrintSizeX = 200;
+        Assert.Null(viewModel.PrintErrorMessage);
     }
 
     [Fact]

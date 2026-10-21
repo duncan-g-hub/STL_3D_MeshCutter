@@ -8,7 +8,8 @@ public class PrintVolume
     private static void ControlValue(double value, string name)
     { 
         if (value <= 0)
-            throw new ArgumentOutOfRangeException(name, $"{name} doit être supérieur à 0.");
+            throw new ArgumentOutOfRangeException(name.ToLower(), $"The print volume on {name.ToLower()} must be greater than 0.");
+            
     } 
 
 

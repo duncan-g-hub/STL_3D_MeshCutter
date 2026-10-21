@@ -60,7 +60,15 @@ public partial class MainViewModel : ObservableObject
     {
         if (_meshInfo != null)
         {
-            try
+            var errors = SpaceValidator.Validate(PrintSizeX, PrintSizeY, PrintSizeZ, MarginX, MarginY, MarginZ);
+            if (errors.Count > 0)
+            {
+                PrintErrorMessage = SpaceErrorFormatter.Format(errors);
+                PiecesX = 0;
+                PiecesY = 0;
+                PiecesZ = 0;
+            }
+            else
             {
                 var margins = new Margins(MarginX, MarginY, MarginZ);
                 var printVolume = new PrintVolume(PrintSizeX, PrintSizeY, PrintSizeZ);
@@ -68,14 +76,7 @@ public partial class MainViewModel : ObservableObject
                 PiecesX = cutPlanner.PiecesX;
                 PiecesY = cutPlanner.PiecesY;
                 PiecesZ = cutPlanner.PiecesZ;
-                PrintErrorMessage = cutPlanner.ErrorMessage;
-            }
-            catch (ArgumentOutOfRangeException e)
-            {
-                PrintErrorMessage = e.Message;
-                PiecesX = 0;
-                PiecesY = 0;
-                PiecesZ = 0;
+                PrintErrorMessage = null;
             }
         }
     }

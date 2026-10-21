@@ -18,7 +18,7 @@ public class Margins
     private static void ControlValue(double value, string name)
     {
         if (value < 0)
-            throw new ArgumentOutOfRangeException(name, $"La marge en {name} doit être supérieur ou égale à 0.");
+            throw new ArgumentOutOfRangeException(name.ToLower(), $"The margin on {name.ToLower()} must be greater than or equal to 0.");
     }
 
 }

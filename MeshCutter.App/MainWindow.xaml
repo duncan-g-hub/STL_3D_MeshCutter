@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MeshCutter.App"
         xmlns:helix="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
         mc:Ignorable="d"
-        Title="MeshCutter" Height="550" Width="800" MinHeight="550" MinWidth="600"
+        Title="MeshCutter" Height="600" Width="800" MinHeight="550" MinWidth="600"
         Language="fr-FR">
         
     <Grid Margin="10">
