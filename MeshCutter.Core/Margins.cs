@@ -7,18 +7,18 @@ public class Margins
 
     public Margins(double x, double y, double z)
     {
-        ControlValue(x, nameof(X));
+        ControlValue(x, "x axis");
         X = x;
-        ControlValue(y, nameof(Y));
+        ControlValue(y, "y axis");
         Y = y;
-        ControlValue(z, nameof(Z));
+        ControlValue(z, "z axis");
         Z = z;
     }
 
     private static void ControlValue(double value, string name)
     {
         if (value < 0)
-            throw new ArgumentOutOfRangeException(name.ToLower(), $"The margin on {name.ToLower()} must be greater than or equal to 0.");
+            throw new ArgumentOutOfRangeException(name, $"The margin on {name} must be greater than or equal to 0.");
     }
 
 }

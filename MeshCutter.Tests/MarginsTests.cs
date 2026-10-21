@@ -10,7 +10,7 @@ public class MarginsTests
         var exception = Assert.Throws<ArgumentOutOfRangeException>(
             () => new Margins(-4, 20, 20)
         );
-        Assert.Equal("X", exception.ParamName);
+        Assert.Equal("x axis", exception.ParamName);
     }
 
     [Fact]
@@ -19,7 +19,7 @@ public class MarginsTests
         var exception = Assert.Throws<ArgumentOutOfRangeException>(
             () => new Margins(20, -4, 20)
         );
-        Assert.Equal("Y", exception.ParamName);
+        Assert.Equal("y axis", exception.ParamName);
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public class MarginsTests
         var exception = Assert.Throws<ArgumentOutOfRangeException>(
             () => new Margins(20, 20, -4)
         );
-        Assert.Equal("Z", exception.ParamName);
+        Assert.Equal("z axis", exception.ParamName);
     }
 
     [Fact]

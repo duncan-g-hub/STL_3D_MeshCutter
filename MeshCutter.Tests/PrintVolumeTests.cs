@@ -10,7 +10,7 @@ public class PrintVolumeTests
         var exception = Assert.Throws<ArgumentOutOfRangeException>(
             () => new PrintVolume(-4, 200, 200)
         );
-        Assert.Equal("SizeX", exception.ParamName);
+        Assert.Equal("x axis", exception.ParamName);
     }
 
     [Fact]
@@ -19,7 +19,7 @@ public class PrintVolumeTests
         var exception = Assert.Throws<ArgumentOutOfRangeException>(
             () => new PrintVolume(200, -4, 200)
         );
-        Assert.Equal("SizeY", exception.ParamName);
+        Assert.Equal("y axis", exception.ParamName);
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public class PrintVolumeTests
         var exception = Assert.Throws<ArgumentOutOfRangeException>(
             () => new PrintVolume(200, 200, -4)
         );
-        Assert.Equal("SizeZ", exception.ParamName);
+        Assert.Equal("z axis", exception.ParamName);
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public class PrintVolumeTests
         var exception = Assert.Throws<ArgumentOutOfRangeException>(
             () => new PrintVolume(0, 200, 200)
         );
-        Assert.Equal("SizeX", exception.ParamName);
+        Assert.Equal("x axis", exception.ParamName);
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public class PrintVolumeTests
         var exception = Assert.Throws<ArgumentOutOfRangeException>(
             () => new PrintVolume(200, 0, 200)
         );
-        Assert.Equal("SizeY", exception.ParamName);
+        Assert.Equal("y axis", exception.ParamName);
     }
 
     [Fact]
@@ -55,7 +55,7 @@ public class PrintVolumeTests
         var exception = Assert.Throws<ArgumentOutOfRangeException>(
             () => new PrintVolume(200, 200, 0)
         );
-        Assert.Equal("SizeZ", exception.ParamName);
+        Assert.Equal("z axis", exception.ParamName);
     }
 
     [Fact]

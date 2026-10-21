@@ -8,18 +8,18 @@ public class PrintVolume
     private static void ControlValue(double value, string name)
     { 
         if (value <= 0)
-            throw new ArgumentOutOfRangeException(name.ToLower(), $"The print volume on {name.ToLower()} must be greater than 0.");
+            throw new ArgumentOutOfRangeException(name, $"The print volume on {name} must be greater than 0.");
             
     } 
 
 
     public PrintVolume(double sizeX, double sizeY, double sizeZ)
     {
-        ControlValue(sizeX, nameof(SizeX));
+        ControlValue(sizeX, "x axis");
         SizeX = sizeX;
-        ControlValue(sizeY, nameof(SizeY));
+        ControlValue(sizeY, "y axis");
         SizeY = sizeY;
-        ControlValue(sizeZ, nameof(SizeZ));
+        ControlValue(sizeZ, "z axis");
         SizeZ = sizeZ;
     }
 
