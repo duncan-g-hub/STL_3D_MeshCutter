@@ -246,4 +246,105 @@ public class ValidatorsTests
     {
         Assert.Empty(SpaceValidator.Validate(20, 20, 20, 10, 10, 10));
     }
+
+
+    private static readonly double[] NotFiniteValues =
+    {
+        double.NaN, double.PositiveInfinity, double.NegativeInfinity
+    };
+
+    [Fact]
+    public void Validate_WhenSizeXIsNotFinite_ReturnsOnlySizeNotANumberOnX()
+    {
+        foreach (double bad in NotFiniteValues)
+        {
+            var errors = SpaceValidator.Validate(bad, 20, 20, 10, 10, 10);
+            var error = Assert.Single(errors);
+            Assert.Equal(new SpaceError(Axis.X, KindOfError.SizeNotANumber), error);
+        }
+    }
+
+    [Fact]
+    public void Validate_WhenSizeYIsNotFinite_ReturnsOnlySizeNotANumberOnY()
+    {
+        foreach (double bad in NotFiniteValues)
+        {
+            var errors = SpaceValidator.Validate(20, bad, 20, 10, 10, 10);
+            var error = Assert.Single(errors);
+            Assert.Equal(new SpaceError(Axis.Y, KindOfError.SizeNotANumber), error);
+        }
+    }
+
+    [Fact]
+    public void Validate_WhenSizeZIsNotFinite_ReturnsOnlySizeNotANumberOnZ()
+    {
+        foreach (double bad in NotFiniteValues)
+        {
+            var errors = SpaceValidator.Validate(20, 20, bad, 10, 10, 10);
+            var error = Assert.Single(errors);
+            Assert.Equal(new SpaceError(Axis.Z, KindOfError.SizeNotANumber), error);
+        }
+    }
+
+    [Fact]
+    public void Validate_WhenMarginXIsNotFinite_ReturnsOnlyMarginNotANumberOnX()
+    {
+        foreach (double bad in NotFiniteValues)
+        {
+            var errors = SpaceValidator.Validate(20, 20, 20, bad, 10, 10);
+            var error = Assert.Single(errors);
+            Assert.Equal(new SpaceError(Axis.X, KindOfError.MarginNotANumber), error);
+        }
+    }
+
+    [Fact]
+    public void Validate_WhenMarginYIsNotFinite_ReturnsOnlyMarginNotANumberOnY()
+    {
+        foreach (double bad in NotFiniteValues)
+        {
+            var errors = SpaceValidator.Validate(20, 20, 20, 10, bad, 10);
+            var error = Assert.Single(errors);
+            Assert.Equal(new SpaceError(Axis.Y, KindOfError.MarginNotANumber), error);
+        }
+    }
+
+    [Fact]
+    public void Validate_WhenMarginZIsNotFinite_ReturnsOnlyMarginNotANumberOnZ()
+    {
+        foreach (double bad in NotFiniteValues)
+        {
+            var errors = SpaceValidator.Validate(20, 20, 20, 10, 10, bad);
+            var error = Assert.Single(errors);
+            Assert.Equal(new SpaceError(Axis.Z, KindOfError.MarginNotANumber), error);
+        }
+    }
+
+    [Fact]
+    public void Validate_WhenSizeAndMarginXAreNaN_ReturnsBothErrorsInOrder()
+    {
+        var errors = SpaceValidator.Validate(double.NaN, 20, 20, double.NaN, 10, 10);
+
+        Assert.Equal(
+            new List<SpaceError>
+            {
+                new(Axis.X, KindOfError.SizeNotANumber),
+                new(Axis.X, KindOfError.MarginNotANumber),
+            },
+            errors);
+    }
+
+    [Fact]
+    public void Validate_WhenDifferentErrorsOnEachAxis_ReturnsThemInAxisOrder()
+    {
+        var errors = SpaceValidator.Validate(double.NaN, 0, 20, 10, 10, -5);
+
+        Assert.Equal(
+            new List<SpaceError>
+            {
+                new(Axis.X, KindOfError.SizeNotANumber),
+                new(Axis.Y, KindOfError.SizeNotPositive),
+                new(Axis.Z, KindOfError.MarginNegative),
+            },
+            errors);
+}
 }

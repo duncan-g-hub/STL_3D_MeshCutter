@@ -66,4 +66,47 @@ public class PrintVolumeTests
         Assert.Equal(200, printVolume.SizeY);
         Assert.Equal(300, printVolume.SizeZ);
     }
+
+
+
+    private static readonly double[] NotFiniteValues =
+    {
+        double.NaN, double.PositiveInfinity, double.NegativeInfinity
+    };
+
+    [Fact]
+    public void PrintVolume_WhenSizeXIsNotFinite_SetsError()
+    {
+        foreach (double bad in NotFiniteValues)
+        {
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(
+                () => new PrintVolume(bad, 200, 200)
+            );
+            Assert.Equal("x axis", exception.ParamName);
+        }
+    }
+
+    [Fact]
+    public void PrintVolume_WhenSizeYIsNotFinite_SetsError()
+    {
+        foreach (double bad in NotFiniteValues)
+        {
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(
+                () => new PrintVolume(200, bad, 200)
+            );
+            Assert.Equal("y axis", exception.ParamName);
+        }
+    }
+
+    [Fact]
+    public void PrintVolume_WhenSizeZIsNotFinite_SetsError()
+    {
+        foreach (double bad in NotFiniteValues)
+        {
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(
+                () => new PrintVolume(200, 200, bad)
+            );
+            Assert.Equal("z axis", exception.ParamName);
+        }
+    }
 }

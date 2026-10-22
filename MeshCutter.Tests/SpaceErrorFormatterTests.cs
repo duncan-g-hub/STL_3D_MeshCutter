@@ -67,4 +67,20 @@ public class SpaceErrorFormatterTests
             () => SpaceErrorFormatter.Format(new[] { error })
         );
     }
+
+    [Fact]
+    public void Format_WhenSizeIsNotANumber_ReturnsFormattedError()
+    {
+        var errors = new List<SpaceError> { new(Axis.X, KindOfError.SizeNotANumber) };
+        Assert.Equal("Axe X : l'espace de l'imprimante doit être un nombre valide.",
+            SpaceErrorFormatter.Format(errors));
+    }
+
+    [Fact]
+    public void Format_WhenMarginIsNotANumber_ReturnsFormattedError()
+    {
+        var errors = new List<SpaceError> { new(Axis.Y, KindOfError.MarginNotANumber) };
+        Assert.Equal("Axe Y : la marge doit être un nombre valide.",
+            SpaceErrorFormatter.Format(errors));
+    }
 }

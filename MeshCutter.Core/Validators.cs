@@ -7,7 +7,7 @@ public enum Axis
 
 public enum KindOfError
 {
-    SizeNotPositive = 1, MarginNegative = 2, MarginTooBig = 3
+    SizeNotPositive = 1, MarginNegative = 2, MarginTooBig = 3, SizeNotANumber = 4, MarginNotANumber = 5
 }
 
  public record SpaceError(Axis Axis, KindOfError KindOfError)
@@ -21,27 +21,33 @@ public static class SpaceValidator
     {
         var errors = new List<SpaceError>();
 
-        if (sizeX <= 0)
-            errors.Add(new SpaceError(Axis.X, KindOfError.SizeNotPositive));
-        else if (sizeX - marginX <= 0)
-            errors.Add(new SpaceError(Axis.X, KindOfError.MarginTooBig));
-        if (marginX < 0)
-            errors.Add(new SpaceError(Axis.X, KindOfError.MarginNegative));
+        errors.AddRange((GetErrorsOnOneAxe(Axis.X, sizeX, marginX)));
+        errors.AddRange((GetErrorsOnOneAxe(Axis.Y, sizeY, marginY)));
+        errors.AddRange((GetErrorsOnOneAxe(Axis.Z, sizeZ, marginZ)));
 
-        if (sizeY <= 0)
-            errors.Add(new SpaceError(Axis.Y, KindOfError.SizeNotPositive));
-        else if (sizeY - marginY <= 0)
-            errors.Add(new SpaceError(Axis.Y, KindOfError.MarginTooBig));
-        if (marginY < 0)
-            errors.Add(new SpaceError(Axis.Y, KindOfError.MarginNegative));
+        return errors;
+    }
 
-        if (sizeZ <= 0)
-            errors.Add(new SpaceError(Axis.Z, KindOfError.SizeNotPositive));
-        else if (sizeZ - marginZ <= 0)
-            errors.Add(new SpaceError(Axis.Z, KindOfError.MarginTooBig));
-        if (marginZ < 0)
-            errors.Add(new SpaceError(Axis.Z, KindOfError.MarginNegative));
+    private static List<SpaceError> GetErrorsOnOneAxe(Axis axis, double size, double margin)
+    {
+        var errors = new List<SpaceError>();
 
+        if (!double.IsFinite(size))
+            errors.Add(new SpaceError(axis, KindOfError.SizeNotANumber));
+        else if (size <= 0)
+            errors.Add(new SpaceError(axis, KindOfError.SizeNotPositive));
+
+
+        if (!double.IsFinite(margin))
+            errors.Add(new SpaceError(axis, KindOfError.MarginNotANumber));
+        else if (margin < 0)
+            errors.Add(new SpaceError(axis, KindOfError.MarginNegative));
+
+
+        if (double.IsFinite(size) && double.IsFinite(margin) && (size > 0))
+            if (size - margin <= 0)
+                errors.Add(new SpaceError(axis, KindOfError.MarginTooBig));
+        
         return errors;
     }
 

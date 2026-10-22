@@ -1,7 +1,8 @@
-
 using g3;
 using System.Windows.Media.Media3D;
 using System.Windows.Media;
+
+namespace MeshCutter.App;
 
 class Converter
 {

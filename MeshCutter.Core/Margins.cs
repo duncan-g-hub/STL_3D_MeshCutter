@@ -17,7 +17,7 @@ public class Margins
 
     private static void ControlValue(double value, string name)
     {
-        if (value < 0)
+        if (!double.IsFinite(value) || value < 0)
             throw new ArgumentOutOfRangeException(name, $"The margin on {name} must be greater than or equal to 0.");
     }
 
