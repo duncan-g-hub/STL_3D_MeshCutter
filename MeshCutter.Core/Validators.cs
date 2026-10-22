@@ -21,14 +21,14 @@ public static class SpaceValidator
     {
         var errors = new List<SpaceError>();
 
-        errors.AddRange((GetErrorsOnOneAxe(Axis.X, sizeX, marginX)));
-        errors.AddRange((GetErrorsOnOneAxe(Axis.Y, sizeY, marginY)));
-        errors.AddRange((GetErrorsOnOneAxe(Axis.Z, sizeZ, marginZ)));
+        errors.AddRange(GetErrorsOnOneAxis(Axis.X, sizeX, marginX));
+        errors.AddRange(GetErrorsOnOneAxis(Axis.Y, sizeY, marginY));
+        errors.AddRange(GetErrorsOnOneAxis(Axis.Z, sizeZ, marginZ));
 
         return errors;
     }
 
-    private static List<SpaceError> GetErrorsOnOneAxe(Axis axis, double size, double margin)
+    private static List<SpaceError> GetErrorsOnOneAxis(Axis axis, double size, double margin)
     {
         var errors = new List<SpaceError>();
 

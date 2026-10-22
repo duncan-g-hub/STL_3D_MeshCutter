@@ -112,7 +112,7 @@ public class MainViewModelUnitTest
     }
 
     [Fact]
-    public void LoadErrorFile_WhenValidFileLoaded_PreviousStateRetained()
+    public void LoadFile_WhenSecondFileIsInvalid_KeepsFirstModel()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
         MainViewModel viewModel = new(new FakeFileDialogService(path));
