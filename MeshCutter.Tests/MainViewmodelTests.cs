@@ -60,7 +60,6 @@ public class MainViewModelUnitTest
         Assert.Equal("Informations : ", viewModel.Informations);
     }
 
-
     [Fact]
     public void CutMesh_WhenMeshSmallerThanPrintableVolume_ReturnOnePiece()
     {
