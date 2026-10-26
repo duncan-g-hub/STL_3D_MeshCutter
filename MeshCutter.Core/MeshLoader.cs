@@ -20,13 +20,12 @@ public class MeshLoader
 
 
 
-    // void Explo()
-    // {
-    //     g3.DMesh3Builder
-    //     g3.STLFormatReader
-    //     g3.StandardMeshReader
-    //     g3.StandardMeshWriter
-    //     g3.MeshPlaneCut
-    //     g3.PlanarHoleFiller
-        
-    // }
+public class Explo()
+{
+        // g3.DMesh3Builder
+        // g3.STLFormatReader
+        // g3.StandardMeshReader
+        // g3.StandardMeshWriter
+        // g3.MeshPlaneCut();
+        // g3.PlanarHoleFiller
+}

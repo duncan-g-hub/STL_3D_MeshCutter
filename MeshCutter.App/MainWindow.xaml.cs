@@ -4,6 +4,7 @@ using MeshCutter.App.ViewModels;
 using System.ComponentModel;
 using MeshCutter.App.Services;
 
+
 namespace MeshCutter.App;
 
 public partial class MainWindow : Window
@@ -13,10 +14,15 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         DataContext = _viewModel;
-        _viewModel.PropertyChanged += OnViewModelPropertyChanged; 
+        _viewModel.PropertyChanged += OnViewModelPropertyChanged;     
+        // explo();
     }
     
     
+    // public void explo()
+    // {
+        
+    // }
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
