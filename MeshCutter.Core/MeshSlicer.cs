@@ -2,7 +2,6 @@ using g3;
 
 namespace MeshCutter.Core;
 
-
 public class MeshSlicer
 {
     public static (DMesh3, DMesh3, DMesh3) Cut(DMesh3 meshBase, Vector3d origin, Vector3d normale)
