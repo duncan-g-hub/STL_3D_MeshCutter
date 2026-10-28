@@ -50,5 +50,38 @@ public static class SpaceValidator
         
         return errors;
     }
-
 }
+
+
+
+
+
+public enum SlicerError
+{
+    TooLowSliceCoordinate = 1, TooHighSliceCoordinate = 2, CoordinateNotANumber = 3, MinThicknessNotANumber = 4,
+}
+
+public static class SlicerValidator
+{
+    public static SlicerError? Validate(double meshMin, double meshMax, double coordinate, double minThickness)
+    {
+        if (!double.IsFinite(coordinate))
+        {
+            return SlicerError.CoordinateNotANumber;
+        }
+        else if (!double.IsFinite(minThickness))
+        {
+            return SlicerError.MinThicknessNotANumber;
+        }
+        else if (coordinate > meshMax - minThickness)
+        {
+            return SlicerError.TooHighSliceCoordinate;
+        }
+        else if ( coordinate < meshMin + minThickness)
+        {
+            return SlicerError.TooLowSliceCoordinate;
+        }
+        return null;
+    }
+}
+
