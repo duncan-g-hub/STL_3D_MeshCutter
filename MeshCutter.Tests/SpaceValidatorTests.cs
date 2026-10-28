@@ -2,7 +2,7 @@ using MeshCutter.Core;
 
 namespace MeshCutter.Tests;
 
-public class ValidatorsTests
+public class SpaceValidatorsTests
 {
 
     [Fact]
