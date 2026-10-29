@@ -9,7 +9,7 @@ public class MeshSlicer
         // validation 
         // pour l'instant minthickness = const, mais par la suite parametre 
         const double minThickness = 0.5;
-        var error = SlicerValidator.Validate(origin, normal, meshBase.GetBounds(), minThickness);
+        var error = SlicerValidator.Validate(origin, normal, meshBase.GetBounds(), minThickness, meshBase.IsClosed());
         
         if (error != null)
         {

@@ -14,6 +14,19 @@ public class MeshSlicerTests
         return mesh;
     }
 
+
+    [Fact]
+    public void Cut_WhenMeshIsNotClosed_ThrowsArgumentException()
+    {
+        string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm trou.STL");
+        var (result, mesh) = MeshLoader.GetMeshFromSTLFile(path);
+        Assert.NotNull(mesh);
+        var exception = Assert.Throws<ArgumentException>(
+            () => MeshSlicer.Cut(mesh, new Vector3d(0, 0, 30), new Vector3d(0, 0, 1)));
+        Assert.Contains("MeshIsNotClosed", exception.Message);
+    }
+
+
     [Fact]
     public void Cut_WhenPlaneIsAboveMesh_ThrowsArgumentException()
     {

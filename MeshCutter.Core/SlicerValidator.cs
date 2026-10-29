@@ -6,16 +6,21 @@ namespace MeshCutter.Core;
 public enum SlicerError
 {
     TooLowSliceCoordinate = 1, TooHighSliceCoordinate = 2, NormalNotAVector = 3, OriginNotAVector= 4, MinThicknessNotANumber = 5,
-    NormalNotAligned = 6, NormalIsZero = 7,
+    NormalNotAligned = 6, NormalIsZero = 7, MeshIsNotClosed = 8
 }
 
 public static class SlicerValidator
 {
-    public static SlicerError? Validate(Vector3d origin, Vector3d normal, AxisAlignedBox3d bounds, double minThickness)
+    public static SlicerError? Validate(Vector3d origin, Vector3d normal, AxisAlignedBox3d bounds, double minThickness, bool closedMesh)
     {
         double coordinate = 0;
         double meshMax = 0;
         double meshMin = 0;
+
+        if (!closedMesh)
+        {
+            return SlicerError.MeshIsNotClosed;
+        }
 
         if (!double.IsFinite(normal.x) || !double.IsFinite(normal.y) || !double.IsFinite(normal.z))
         {

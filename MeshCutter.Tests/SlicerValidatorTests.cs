@@ -6,13 +6,26 @@ namespace MeshCutter.Tests;
 public class SlicerValidatorTests
 {
     [Fact]
+    public void Validate_WhenMeshIsNotClosed_ReturnsError()
+    {
+        var bounds = new AxisAlignedBox3d(0, 0, 0, 30, 40, 50);
+        var origin = new Vector3d(0, 0, 25);
+        var normal = new Vector3d(0, 0, 1);
+
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, false);
+        Assert.NotNull(error);
+        Assert.Equal(SlicerError.MeshIsNotClosed, error);
+    }
+
+
+    [Fact]
     public void Validate_WhenCoordinateIsExactlyAtLowerLimit_ReturnsNull()
     {
         var bounds = new AxisAlignedBox3d(0, 0, 0, 30, 40, 50);
         var origin = new Vector3d(0, 0, 0.5);
         var normal = new Vector3d(0, 0, 1);
 
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.Null(error);
     }
 
@@ -23,7 +36,7 @@ public class SlicerValidatorTests
         var origin = new Vector3d(0, 0, 49.5);
         var normal = new Vector3d(0, 0, 1);
 
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.Null(error);
     }
 
@@ -34,7 +47,7 @@ public class SlicerValidatorTests
         var origin = new Vector3d(0, 0, 45);
         var normal = new Vector3d(0, 0, 1);
 
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.Null(error);
     }
 
@@ -45,7 +58,7 @@ public class SlicerValidatorTests
         var origin = new Vector3d(0, 45, 0);
         var normal = new Vector3d(0, 1, 0);
 
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.Null(error);
     }
 
@@ -56,7 +69,7 @@ public class SlicerValidatorTests
         var origin = new Vector3d(45, 0, 0);
         var normal = new Vector3d(1, 0, 0);
 
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.Null(error);
     }
 
@@ -68,7 +81,7 @@ public class SlicerValidatorTests
         var origin = new Vector3d(0, 0, 49.6);
         var normal = new Vector3d(0, 0, 1);
 
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.NotNull(error);
         Assert.Equal(SlicerError.TooHighSliceCoordinate, error);
     }
@@ -79,7 +92,7 @@ public class SlicerValidatorTests
         var bounds = new AxisAlignedBox3d(0, 0, 0, 30, 40, 50);
         var origin = new Vector3d(0, 0, 0.4);
         var normal = new Vector3d(0, 0, 1);
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.NotNull(error);
         Assert.Equal(SlicerError.TooLowSliceCoordinate, error);
     }
@@ -90,7 +103,7 @@ public class SlicerValidatorTests
         var bounds = new AxisAlignedBox3d(20, 10, 0, 50, 40, 30);
         var origin = new Vector3d(0, 0, 31);
         var normal = new Vector3d(0, 0, 1);
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.NotNull(error);
         Assert.Equal(SlicerError.TooHighSliceCoordinate, error);
     }
@@ -101,7 +114,7 @@ public class SlicerValidatorTests
         var bounds = new AxisAlignedBox3d(10, 20, 30, 30, 40, 50);
         var origin = new Vector3d(0, 0, 29);
         var normal = new Vector3d(0, 0, 1);
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.NotNull(error);
         Assert.Equal(SlicerError.TooLowSliceCoordinate, error);
     }
@@ -112,7 +125,7 @@ public class SlicerValidatorTests
         var bounds = new AxisAlignedBox3d(0, 0, 0, 50, 30, 40);
         var origin = new Vector3d(0, 31, 0);
         var normal = new Vector3d(0, 1, 0);
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.NotNull(error);
         Assert.Equal(SlicerError.TooHighSliceCoordinate, error);
     }
@@ -123,7 +136,7 @@ public class SlicerValidatorTests
         var bounds = new AxisAlignedBox3d(10, 30, 20, 30, 50, 40);
         var origin = new Vector3d(0, 29, 0);
         var normal = new Vector3d(0, 1, 0);
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.NotNull(error);
         Assert.Equal(SlicerError.TooLowSliceCoordinate, error);
     }
@@ -134,7 +147,7 @@ public class SlicerValidatorTests
         var bounds = new AxisAlignedBox3d(0, 0, 0, 30, 50, 40);
         var origin = new Vector3d(31, 0, 0);
         var normal = new Vector3d(1, 0, 0);
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.NotNull(error);
         Assert.Equal(SlicerError.TooHighSliceCoordinate, error);
     }
@@ -145,7 +158,7 @@ public class SlicerValidatorTests
         var bounds = new AxisAlignedBox3d(30, 10, 20, 50, 30, 40);
         var origin = new Vector3d(29, 0, 0);
         var normal = new Vector3d(1, 0, 0);
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.NotNull(error);
         Assert.Equal(SlicerError.TooLowSliceCoordinate, error);
     }
@@ -156,7 +169,7 @@ public class SlicerValidatorTests
         var bounds = new AxisAlignedBox3d(0, 0, 0, 30, 40, 50);
         var origin = new Vector3d(0, 0, 25);
         var normal = new Vector3d(0, 0, 0);
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.NotNull(error);
         Assert.Equal(SlicerError.NormalIsZero, error);
     }
@@ -167,7 +180,7 @@ public class SlicerValidatorTests
         var bounds = new AxisAlignedBox3d(0, 0, 0, 30, 40, 50);
         var origin = new Vector3d(0, 0, 25);
         var normal = new Vector3d(0, 0, -1);
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.Null(error);
     }
 
@@ -177,7 +190,7 @@ public class SlicerValidatorTests
         var bounds = new AxisAlignedBox3d(0, 0, 0, 30, 40, 50);
         var origin = new Vector3d(0, 0, 25);
         var normal = new Vector3d(0, 1, 1);
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.NotNull(error);
         Assert.Equal(SlicerError.NormalNotAligned, error);
     }
@@ -188,7 +201,7 @@ public class SlicerValidatorTests
         var bounds = new AxisAlignedBox3d(0, 0, 0, 30, 40, 50);
         var origin = new Vector3d(0, 0, 25);
         var normal = new Vector3d(1, 1, 1);
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.NotNull(error);
         Assert.Equal(SlicerError.NormalNotAligned, error);
     }
@@ -199,7 +212,7 @@ public class SlicerValidatorTests
         var bounds = new AxisAlignedBox3d(0, 0, 0, 30, 40, 50);
         var origin = new Vector3d(0, 0, 25);
         var normal = new Vector3d(0, 0.000000001, 1);
-        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5);
+        var error = SlicerValidator.Validate(origin, normal, bounds, 0.5, true);
         Assert.NotNull(error);
         Assert.Equal(SlicerError.NormalNotAligned, error);
     }
@@ -220,11 +233,11 @@ public class SlicerValidatorTests
         foreach (double bad in NotFiniteValues)
         {
             Assert.Equal(SlicerError.OriginNotAVector,
-                SlicerValidator.Validate(new Vector3d(bad, 0, 25), normal, bounds, 0.5));
+                SlicerValidator.Validate(new Vector3d(bad, 0, 25), normal, bounds, 0.5, true));
             Assert.Equal(SlicerError.OriginNotAVector,
-                SlicerValidator.Validate(new Vector3d(0, bad, 25), normal, bounds, 0.5));
+                SlicerValidator.Validate(new Vector3d(0, bad, 25), normal, bounds, 0.5, true));
             Assert.Equal(SlicerError.OriginNotAVector,
-                SlicerValidator.Validate(new Vector3d(0, 25, bad), normal, bounds, 0.5));
+                SlicerValidator.Validate(new Vector3d(0, 25, bad), normal, bounds, 0.5, true));
 
         }
     }
@@ -238,11 +251,11 @@ public class SlicerValidatorTests
         foreach (double bad in NotFiniteValues)
         {
             Assert.Equal(SlicerError.NormalNotAVector,
-                SlicerValidator.Validate(origin, new Vector3d(bad, 0, 1), bounds, 0.5));
+                SlicerValidator.Validate(origin, new Vector3d(bad, 0, 1), bounds, 0.5, true));
             Assert.Equal(SlicerError.NormalNotAVector,
-                SlicerValidator.Validate(origin, new Vector3d(0, bad, 1), bounds, 0.5));
+                SlicerValidator.Validate(origin, new Vector3d(0, bad, 1), bounds, 0.5, true));
             Assert.Equal(SlicerError.NormalNotAVector,
-                SlicerValidator.Validate(origin, new Vector3d(0, 1, bad), bounds, 0.5));
+                SlicerValidator.Validate(origin, new Vector3d(0, 1, bad), bounds, 0.5, true));
         }
     }
 
@@ -254,7 +267,7 @@ public class SlicerValidatorTests
             var bounds = new AxisAlignedBox3d(0, 0, 0, 30, 40, 50);
             var origin = new Vector3d(0, 0, 25);
             var normal = new Vector3d(0, 0, 1);
-            var error = SlicerValidator.Validate(origin, normal, bounds, bad);
+            var error = SlicerValidator.Validate(origin, normal, bounds, bad, true);
             Assert.NotNull(error);
             Assert.Equal(SlicerError.MinThicknessNotANumber, error);
         }
