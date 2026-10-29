@@ -14,13 +14,7 @@ public static class SpaceErrorFormatter
 
     private static string FormatOne(SpaceError error)
     {
-        string name = error.Axis switch
-        {
-            Axis.X => "Axe X",
-            Axis.Y => "Axe Y",
-            Axis.Z => "Axe Z",
-            _ => throw new ArgumentOutOfRangeException(nameof(error))
-        };
+        string name = AxisFormatter.FormatAxis(error.Axis);
 
         return error.KindOfError switch
         {
