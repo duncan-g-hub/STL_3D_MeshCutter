@@ -44,6 +44,25 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private string? _printErrorMessage;
 
+
+    [ObservableProperty]
+    private Axis _slicerAxis = Axis.X;
+    [ObservableProperty]
+    private double _slicerPosition = 5;
+    [ObservableProperty]
+    private DMesh3? _meshBase;
+    [ObservableProperty]
+    private DMesh3? _meshBottom;
+    [ObservableProperty]
+    private DMesh3? _meshTop;
+    [ObservableProperty]
+    private string? _slicerErrorMessage;
+
+
+
+
+
+
     public MainViewModel(IFileDialogService fileDialogService)
     {
         _fileDialogService = fileDialogService;
