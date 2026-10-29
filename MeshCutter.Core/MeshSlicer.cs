@@ -4,8 +4,18 @@ namespace MeshCutter.Core;
 
 public class MeshSlicer
 {
-    public static (DMesh3, DMesh3, DMesh3) Cut(DMesh3 meshBase, Vector3d origin, Vector3d normale)
+    public static (DMesh3, DMesh3, DMesh3) Cut(DMesh3 meshBase, Vector3d origin, Vector3d normal)
     {
+        // validation 
+        // pour l'instant minthickness = const, mais par la suite parametre 
+        const double minThickness = 0.5;
+        var error = SlicerValidator.Validate(origin, normal, meshBase.GetBounds(), minThickness);
+        
+        if (error != null)
+        {
+            throw new ArgumentException($"Invalid configuration: {error}");
+        }
+
         // copie 
         var meshCopyBottom = new DMesh3();
         meshCopyBottom.Copy(meshBase);
@@ -15,18 +25,17 @@ public class MeshSlicer
         // découpe 
 
         // partie basse
-        var cutBottom = new MeshPlaneCut(meshCopyBottom, origin , normale);
+        var cutBottom = new MeshPlaneCut(meshCopyBottom, origin , normal);
         cutBottom.Cut();
         cutBottom.FillHoles();
 
         // partie haute
-        var cutTop = new MeshPlaneCut(meshCopyTop, origin , -normale);
+        var cutTop = new MeshPlaneCut(meshCopyTop, origin , -normal);
         cutTop.Cut();
         cutTop.FillHoles();
 
         return (meshCopyBottom, meshCopyTop, meshBase);
     }
-
 }
 
 
