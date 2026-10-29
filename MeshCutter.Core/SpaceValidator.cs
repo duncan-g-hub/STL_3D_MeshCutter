@@ -1,10 +1,5 @@
 namespace MeshCutter.Core;
 
-public enum Axis 
-{
-    X = 1, Y = 2, Z = 3
-}
-
 public enum KindOfError
 {
     SizeNotPositive = 1, MarginNegative = 2, MarginTooBig = 3, SizeNotANumber = 4, MarginNotANumber = 5
