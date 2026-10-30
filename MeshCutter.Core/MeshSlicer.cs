@@ -6,10 +6,8 @@ public class MeshSlicer
 {
     public static (DMesh3, DMesh3, DMesh3) Cut(DMesh3 meshBase, Vector3d origin, Vector3d normal)
     {
-        // validation 
-        // pour l'instant minthickness = const, mais par la suite parametre 
-        const double minThickness = 0.5;
-        var error = SlicerValidator.Validate(origin, normal, meshBase.GetBounds(), minThickness, meshBase.IsClosed());
+        // validation        
+        var error = SlicerValidator.Validate(origin, normal, meshBase.GetBounds(), Settings.MinThickness, meshBase.IsClosed());
         
         if (error != null)
         {
