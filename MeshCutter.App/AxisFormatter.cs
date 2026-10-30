@@ -15,3 +15,5 @@ public static class AxisFormatter
         };
     }
 }
+
+public record AxisChoice(string Name, Axis Value);
