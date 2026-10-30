@@ -59,14 +59,60 @@ public partial class MainViewModel : ObservableObject
     private string? _slicerErrorMessage;
 
 
-
-
-
+    public List<AxisChoice> Choices { get; } = new()
+    {
+        new(AxisFormatter.FormatAxis(Axis.X), Axis.X),
+        new(AxisFormatter.FormatAxis(Axis.Y), Axis.Y),
+        new(AxisFormatter.FormatAxis(Axis.Z), Axis.Z),
+    };
 
     public MainViewModel(IFileDialogService fileDialogService)
     {
         _fileDialogService = fileDialogService;
     }
+
+    [RelayCommand]
+    public void CutMesh()
+    {
+        if (MeshBase != null)
+        {
+            var (origin, normal) = GetOriginAndNormal();
+            var error = SlicerValidator.Validate(origin, normal, MeshBase.GetBounds(), Settings.MinThickness, MeshBase.IsClosed());
+            if (error != null)
+            {
+                SlicerErrorMessage = SlicerErrorFormatter.Format(error);
+            }
+            else
+            {
+                (MeshBottom, MeshTop, MeshBase) = MeshSlicer.Cut(MeshBase, origin, normal);
+                SlicerErrorMessage = null;
+                // par la suite appel de la gestion pour ouvrir les deux nouvelles fenetre en leur passant les nouvelles mesh converties 
+            }
+        }
+    }
+
+    private (Vector3d, Vector3d) GetOriginAndNormal()
+    {
+        Vector3d origin = new Vector3d (0, 0, 0);
+        Vector3d normal = new Vector3d (0, 0, 0);
+        if (SlicerAxis == Axis.X)
+        {
+            origin.x = SlicerPosition;
+            normal.x = 1;
+        }
+        else if (SlicerAxis == Axis.Y)
+        {
+            origin.y = SlicerPosition;
+            normal.y = 1;
+        }
+        else if (SlicerAxis == Axis.Z)
+        {
+            origin.z = SlicerPosition;
+            normal.z = 1;
+        }
+        return (origin, normal);
+    }
+
 
     partial void OnPrintSizeXChanged(double value) => Recalculate();
     partial void OnPrintSizeYChanged(double value) => Recalculate();
@@ -115,6 +161,7 @@ public partial class MainViewModel : ObservableObject
         var (result, mesh) = MeshLoader.GetMeshFromSTLFile(path);
         if (result.code == IOCode.Ok && mesh != null)
         {
+            MeshBase = mesh;
             _meshInfo = MeshInfo.GetMeshInfo(mesh);
             Informations = GetModelInfos();
             Mesh = Converter.MeshConverter(mesh);  
