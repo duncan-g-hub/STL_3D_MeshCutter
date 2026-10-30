@@ -1,6 +1,7 @@
 ﻿using MeshCutter.Tests.Fakes;
 using MeshCutter.App.ViewModels;
 using MeshCutter.Core;
+using MeshCutter.App;
 
 namespace MeshCutter.Tests;
 
@@ -231,7 +232,7 @@ public class MainViewModelUnitTest
     }
 
     [Fact]
-    public void CutMesh_WhenConfigurationIsValid_ReturnsTopAndBottomBounds()
+    public void CutMeshOnZ_WhenConfigurationIsValid_ReturnsTopAndBottomBounds()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
         MainViewModel viewModel = new(new FakeFileDialogService(path));
@@ -251,6 +252,53 @@ public class MainViewModelUnitTest
         Assert.NotNull(viewModel.MeshTop);
         Assert.Equal(25, viewModel.MeshTop.GetBounds().Min.z, 1e-3);
         Assert.Equal(50, viewModel.MeshTop.GetBounds().Max.z, 1e-3);
+    }
+
+
+    [Fact]
+    public void CutMeshOnX_WhenConfigurationIsValid_ReturnsTopAndBottomBounds()
+    {
+        string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
+        MainViewModel viewModel = new(new FakeFileDialogService(path));
+        viewModel.OpenFile();
+        
+        Assert.NotNull(viewModel.MeshBase);
+        viewModel.SlicerAxis = Axis.X;
+        viewModel.SlicerPosition = 25;
+
+        viewModel.CutMesh();
+        Assert.Null(viewModel.SlicerErrorMessage);
+
+        Assert.NotNull(viewModel.MeshBottom);
+        Assert.Equal(0, viewModel.MeshBottom.GetBounds().Min.x, 1e-3);
+        Assert.Equal(25, viewModel.MeshBottom.GetBounds().Max.x, 1e-3);
+
+        Assert.NotNull(viewModel.MeshTop);
+        Assert.Equal(25, viewModel.MeshTop.GetBounds().Min.x, 1e-3);
+        Assert.Equal(50, viewModel.MeshTop.GetBounds().Max.x, 1e-3);
+    }
+
+    [Fact]
+    public void CutMeshOnY_WhenConfigurationIsValid_ReturnsTopAndBottomBounds()
+    {
+        string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
+        MainViewModel viewModel = new(new FakeFileDialogService(path));
+        viewModel.OpenFile();
+        
+        Assert.NotNull(viewModel.MeshBase);
+        viewModel.SlicerAxis = Axis.Y;
+        viewModel.SlicerPosition = 25;
+
+        viewModel.CutMesh();
+        Assert.Null(viewModel.SlicerErrorMessage);
+
+        Assert.NotNull(viewModel.MeshBottom);
+        Assert.Equal(0, viewModel.MeshBottom.GetBounds().Min.y, 1e-3);
+        Assert.Equal(25, viewModel.MeshBottom.GetBounds().Max.y, 1e-3);
+
+        Assert.NotNull(viewModel.MeshTop);
+        Assert.Equal(25, viewModel.MeshTop.GetBounds().Min.y, 1e-3);
+        Assert.Equal(50, viewModel.MeshTop.GetBounds().Max.y, 1e-3);
     }
 
 
@@ -374,16 +422,15 @@ public class MainViewModelUnitTest
         Assert.Equal(50, viewModel.MeshTop.GetBounds().Max.z, 1e-3);
     }
 
+    [Fact]
+    public void Choices_ReturnsThreeAxisChoicesWithFormattedNames()
+    {
+        MainViewModel viewModel = new(new FakeFileDialogService(null));
 
-
-    
-
-
-
-
-
-
-
-
+        Assert.Equal(3, viewModel.Choices.Count);
+        Assert.Contains(new AxisChoice("Axe X", Axis.X), viewModel.Choices);
+        Assert.Contains(new AxisChoice("Axe Y", Axis.Y), viewModel.Choices);
+        Assert.Contains(new AxisChoice("Axe Z", Axis.Z), viewModel.Choices);
+    }
 }
 
