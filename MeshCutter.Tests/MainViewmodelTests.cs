@@ -1,5 +1,6 @@
 ﻿using MeshCutter.Tests.Fakes;
 using MeshCutter.App.ViewModels;
+using MeshCutter.Core;
 
 namespace MeshCutter.Tests;
 
@@ -61,7 +62,7 @@ public class MainViewModelUnitTest
     }
 
     [Fact]
-    public void CutMesh_WhenMeshSmallerThanPrintableVolume_ReturnOnePiece()
+    public void CutPlanMesh_WhenMeshSmallerThanPrintableVolume_ReturnOnePiece()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
         MainViewModel viewModel = new(new FakeFileDialogService(path));
@@ -73,7 +74,7 @@ public class MainViewModelUnitTest
     }
 
     [Fact]
-    public void CutMesh_WhenMeshBiggerThanPrintableVolume_ReturnTwoPieces()
+    public void CutPlanMesh_WhenMeshBiggerThanPrintableVolume_ReturnTwoPieces()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
         MainViewModel viewModel = new(new FakeFileDialogService(path));
@@ -85,7 +86,7 @@ public class MainViewModelUnitTest
     }
 
     [Fact]
-    public void CutMesh_WhenPrintableVolumeEqualZero_SetsError()
+    public void CutPlanMesh_WhenPrintableVolumeEqualZero_SetsError()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
         MainViewModel viewModel = new(new FakeFileDialogService(path));
@@ -132,10 +133,11 @@ public class MainViewModelUnitTest
         Assert.Equal(1, viewModel.PiecesX);
         Assert.Equal(1, viewModel.PiecesY);
         Assert.Equal(1, viewModel.PiecesZ);
+        Assert.NotNull(viewModel.MeshBase);
     }
 
     [Fact]
-    public void CutMesh_WhenInvalidValueIsCorrected_ErrorDisappearsAndPiecesComeBack()
+    public void CutPlanMesh_WhenInvalidValueIsCorrected_ErrorDisappearsAndPiecesComeBack()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
         MainViewModel viewModel = new(new FakeFileDialogService(path));
@@ -151,7 +153,7 @@ public class MainViewModelUnitTest
     }
 
     [Fact]
-    public void CutMesh_WhenSeveralValuesAreInvalid_ShowsAllErrors()
+    public void CutPlanMesh_WhenSeveralValuesAreInvalid_ShowsAllErrors()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
         MainViewModel viewModel = new(new FakeFileDialogService(path));
@@ -167,7 +169,7 @@ public class MainViewModelUnitTest
     }
 
     [Fact]
-    public void CutMesh_WhenPrintSizeIsNotANumber_SetsError()
+    public void CutPlanMesh_WhenPrintSizeIsNotANumber_SetsError()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
         MainViewModel viewModel = new(new FakeFileDialogService(path));
@@ -182,7 +184,7 @@ public class MainViewModelUnitTest
     }
 
     [Fact]
-    public void CutMesh_WhenMarginIsInfinite_SetsError()
+    public void CutPlanMesh_WhenMarginIsInfinite_SetsError()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
         MainViewModel viewModel = new(new FakeFileDialogService(path));
@@ -193,5 +195,195 @@ public class MainViewModelUnitTest
         Assert.Equal("Axe Y : la marge doit être un nombre valide.", viewModel.PrintErrorMessage);
         Assert.Equal(0, viewModel.PiecesX);
     }
+
+
+
+    [Fact]
+    public void CutMesh_WhenNoFileLoaded_DoNothing()
+    {
+        MainViewModel viewModel = new(new FakeFileDialogService(null));
+        viewModel.CutMesh();
+        Assert.Null(viewModel.SlicerErrorMessage);
+        Assert.Null(viewModel.MeshBottom);
+        Assert.Null(viewModel.MeshTop);
+        Assert.Null(viewModel.MeshBase);
+    }
+
+    [Fact]
+    public void CutMesh_WhenConfigurationIsValid_ReturnsClosedTopAndBottomMeshes()
+    {
+        string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
+        MainViewModel viewModel = new(new FakeFileDialogService(path));
+        viewModel.OpenFile();
+        
+        Assert.NotNull(viewModel.MeshBase);
+        viewModel.SlicerAxis = Axis.Z;
+        viewModel.SlicerPosition = 25;
+
+        viewModel.CutMesh();
+        Assert.Null(viewModel.SlicerErrorMessage);
+
+        Assert.NotNull(viewModel.MeshBottom);
+        Assert.True(viewModel.MeshBottom.IsClosed());
+
+        Assert.NotNull(viewModel.MeshTop);
+        Assert.True(viewModel.MeshTop.IsClosed());
+    }
+
+    [Fact]
+    public void CutMesh_WhenConfigurationIsValid_ReturnsTopAndBottomBounds()
+    {
+        string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
+        MainViewModel viewModel = new(new FakeFileDialogService(path));
+        viewModel.OpenFile();
+        
+        Assert.NotNull(viewModel.MeshBase);
+        viewModel.SlicerAxis = Axis.Z;
+        viewModel.SlicerPosition = 25;
+
+        viewModel.CutMesh();
+        Assert.Null(viewModel.SlicerErrorMessage);
+
+        Assert.NotNull(viewModel.MeshBottom);
+        Assert.Equal(0, viewModel.MeshBottom.GetBounds().Min.z, 1e-3);
+        Assert.Equal(25, viewModel.MeshBottom.GetBounds().Max.z, 1e-3);
+
+        Assert.NotNull(viewModel.MeshTop);
+        Assert.Equal(25, viewModel.MeshTop.GetBounds().Min.z, 1e-3);
+        Assert.Equal(50, viewModel.MeshTop.GetBounds().Max.z, 1e-3);
+    }
+
+
+    [Fact]
+    public void CutMesh_WhenConfigurationIsValid_ReturnsValidVolumes()
+    {
+        string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
+        MainViewModel viewModel = new(new FakeFileDialogService(path));
+        viewModel.OpenFile();
+        
+        Assert.NotNull(viewModel.MeshBase);
+        viewModel.SlicerAxis = Axis.Z;
+        viewModel.SlicerPosition = 25;
+
+        viewModel.CutMesh();
+        Assert.Null(viewModel.SlicerErrorMessage);
+
+        Assert.NotNull(viewModel.MeshBottom);
+        var volumeBottom = MeshInfo.GetMeshInfo(viewModel.MeshBottom).Volume;
+        Assert.NotNull(volumeBottom);
+        Assert.Equal(62500, volumeBottom.Value, 1e-3);
+
+        Assert.NotNull(viewModel.MeshTop);
+        var volumeTop = MeshInfo.GetMeshInfo(viewModel.MeshTop).Volume;
+        Assert.NotNull(volumeTop);
+        Assert.Equal(62500, volumeTop.Value, 1e-3);
+
+        var volumeInitial = MeshInfo.GetMeshInfo(viewModel.MeshBase).Volume;
+        Assert.NotNull(volumeInitial);
+        Assert.Equal(volumeInitial.Value, volumeBottom.Value + volumeTop.Value, 1e-3);
+    }
+
+    [Fact]
+    public void CutMesh_WhenSlicerPositionTooHigh_ReturnsFormattedError()
+    {
+        string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
+        MainViewModel viewModel = new(new FakeFileDialogService(path));
+        viewModel.OpenFile();
+        
+        Assert.NotNull(viewModel.MeshBase);
+        viewModel.SlicerAxis = Axis.Z;
+        viewModel.SlicerPosition = 50;
+
+        viewModel.CutMesh();
+        Assert.Equal("La position du plan de découpe doit être au sein du modèle, au maximum à une distance valide du bord.", viewModel.SlicerErrorMessage);
+        Assert.Null(viewModel.MeshBottom);
+        Assert.Null(viewModel.MeshTop);
+    }
+
+
+    private static readonly double[] NotFiniteValues =
+    {
+        double.NaN, double.PositiveInfinity, double.NegativeInfinity
+    };
+
+    [Fact]
+    public void CutMesh_WhenPositionIsNotNumber_ReturnsFormattedError()
+    {
+        string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
+        MainViewModel viewModel = new(new FakeFileDialogService(path));
+        viewModel.OpenFile();
+        
+        Assert.NotNull(viewModel.MeshBase);
+        viewModel.SlicerAxis = Axis.Z;
+        foreach (double bad in NotFiniteValues)
+        {
+            viewModel.SlicerPosition = bad;
+            viewModel.CutMesh();
+            Assert.Equal("La position du plan de découpe doit être un nombre valide.", viewModel.SlicerErrorMessage);
+            Assert.Null(viewModel.MeshBottom);
+            Assert.Null(viewModel.MeshTop);
+        }
+    }
+
+    [Fact]
+    public void CutMesh_WhenMeshIsNotClosed_ReturnsFormattedError()
+    {
+        string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm trou.STL");
+        MainViewModel viewModel = new(new FakeFileDialogService(path));
+        viewModel.OpenFile();
+
+        Assert.NotNull(viewModel.MeshBase);
+        viewModel.SlicerAxis = Axis.Z;
+        viewModel.SlicerPosition = 25;
+        viewModel.CutMesh();
+
+        Assert.Equal("Le modèle doit être fermé pour procéder à une découpe.", viewModel.SlicerErrorMessage);
+        Assert.Null(viewModel.MeshBottom);
+        Assert.Null(viewModel.MeshTop);
+    }
+
+    [Fact]
+    public void CutMesh_WhenSecondCutIsInvalid_KeepsFirstResults()
+    {
+        string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
+        MainViewModel viewModel = new(new FakeFileDialogService(path));
+        viewModel.OpenFile();
+        
+        Assert.NotNull(viewModel.MeshBase);
+        viewModel.SlicerAxis = Axis.Z;
+        viewModel.SlicerPosition = 25;
+
+        viewModel.CutMesh();
+        Assert.Null(viewModel.SlicerErrorMessage);
+        Assert.NotNull(viewModel.MeshBottom);
+        Assert.Equal(0, viewModel.MeshBottom.GetBounds().Min.z, 1e-3);
+        Assert.Equal(25, viewModel.MeshBottom.GetBounds().Max.z, 1e-3);
+        Assert.NotNull(viewModel.MeshTop);
+        Assert.Equal(25, viewModel.MeshTop.GetBounds().Min.z, 1e-3);
+        Assert.Equal(50, viewModel.MeshTop.GetBounds().Max.z, 1e-3);
+
+        viewModel.SlicerAxis = Axis.Z;
+        viewModel.SlicerPosition = 100;
+        viewModel.CutMesh();
+        Assert.NotNull(viewModel.SlicerErrorMessage);
+        Assert.NotNull(viewModel.MeshBottom);
+        Assert.Equal(0, viewModel.MeshBottom.GetBounds().Min.z, 1e-3);
+        Assert.Equal(25, viewModel.MeshBottom.GetBounds().Max.z, 1e-3);
+        Assert.NotNull(viewModel.MeshTop);
+        Assert.Equal(25, viewModel.MeshTop.GetBounds().Min.z, 1e-3);
+        Assert.Equal(50, viewModel.MeshTop.GetBounds().Max.z, 1e-3);
+    }
+
+
+
+    
+
+
+
+
+
+
+
+
 }
 
