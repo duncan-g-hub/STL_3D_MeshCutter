@@ -8,17 +8,12 @@ using MeshCutter.Core;
 namespace MeshCutter.App.ViewModels;
 
 
-public partial class MainViewModel : ObservableObject
+public abstract partial class BaseViewModel : ObservableObject
 {
     [ObservableProperty]
     private string? _informations = "Informations : ";
     [ObservableProperty]
     private MeshGeometry3D? _mesh;
-    [ObservableProperty]
-    private string? _fileErrorMessage;
-
-    private readonly IFileDialogService _fileDialogService;
-
     private MeshInfo? _meshInfo; 
 
     [ObservableProperty]
@@ -27,14 +22,12 @@ public partial class MainViewModel : ObservableObject
     private double _printSizeY = 200;
     [ObservableProperty]
     private double _printSizeZ = 200;
-
     [ObservableProperty]
     private double _marginX = 40;
     [ObservableProperty]
     private double _marginY = 60;
     [ObservableProperty]
     private double _marginZ = 20;
-
     [ObservableProperty]
     private int _piecesX;
     [ObservableProperty]
@@ -58,6 +51,22 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private string? _slicerErrorMessage;
 
+    private readonly IPieceWindowService _pieceWindowService;
+
+
+    protected BaseViewModel(IPieceWindowService pieceWindowService)
+    {
+        _pieceWindowService = pieceWindowService;
+    }
+
+    protected void LoadMesh(DMesh3 mesh)
+    {
+        MeshBase = mesh;
+        _meshInfo = MeshInfo.GetMeshInfo(mesh);
+        Informations = GetModelInfos();
+        Mesh = Converter.MeshConverter(mesh);
+        Recalculate();
+    }
 
     public List<AxisChoice> Choices { get; } = new()
     {
@@ -65,11 +74,6 @@ public partial class MainViewModel : ObservableObject
         new(AxisFormatter.FormatAxis(Axis.Y), Axis.Y),
         new(AxisFormatter.FormatAxis(Axis.Z), Axis.Z),
     };
-
-    public MainViewModel(IFileDialogService fileDialogService)
-    {
-        _fileDialogService = fileDialogService;
-    }
 
     [RelayCommand]
     public void CutMesh()
@@ -86,7 +90,10 @@ public partial class MainViewModel : ObservableObject
             {
                 (MeshBottom, MeshTop, MeshBase) = MeshSlicer.Cut(MeshBase, origin, normal);
                 SlicerErrorMessage = null;
-                // par la suite appel de la gestion pour ouvrir les deux nouvelles fenetre en leur passant les nouvelles mesh converties 
+
+                // appel de la gestion pour ouvrir les deux nouvelles fenetre en leur passant les nouvelles mesh 
+                _pieceWindowService.OpenSlicedPiece(MeshBottom, PrintSizeX, PrintSizeY, PrintSizeZ, MarginX, MarginY, MarginZ);
+                _pieceWindowService.OpenSlicedPiece(MeshTop, PrintSizeX, PrintSizeY, PrintSizeZ, MarginX, MarginY, MarginZ);
             }
         }
     }
@@ -145,34 +152,6 @@ public partial class MainViewModel : ObservableObject
             }
         }
     }
-    
-    [RelayCommand]
-    public void OpenFile()
-    {
-        var path = _fileDialogService.GetFilePath();
-        if (path != null)
-        {
-            LoadFile(path);
-        }
-    }
-
-    public void LoadFile(string path)
-    {
-        var (result, mesh) = MeshLoader.GetMeshFromSTLFile(path);
-        if (result.code == IOCode.Ok && mesh != null)
-        {
-            MeshBase = mesh;
-            _meshInfo = MeshInfo.GetMeshInfo(mesh);
-            Informations = GetModelInfos();
-            Mesh = Converter.MeshConverter(mesh);  
-            FileErrorMessage = null;    
-            Recalculate();
-        }
-        else
-        {
-            FileErrorMessage = $"Erreur lors du chargement du fichier : \ncode : {result.code} \nmessage : {result.message}";
-        }
-    }
 
     private string GetModelInfos()
     {
@@ -217,8 +196,61 @@ Volume : {DisplayVolume(m)}
 
 
 
+public partial class MainViewModel : BaseViewModel
+{
+    [ObservableProperty]
+    private string? _fileErrorMessage;
+
+    private readonly IFileDialogService _fileDialogService;
+
+   
+
+    public MainViewModel(IFileDialogService fileDialogService, IPieceWindowService pieceWindowService)
+        : base(pieceWindowService)
+    {
+        _fileDialogService = fileDialogService;
+    }
+    
+    [RelayCommand]
+    public void OpenFile()
+    {
+        var path = _fileDialogService.GetFilePath();
+        if (path != null)
+        {
+            LoadFile(path);
+        }
+    }
+
+    public void LoadFile(string path)
+    {
+        var (result, mesh) = MeshLoader.GetMeshFromSTLFile(path);
+        if (result.code == IOCode.Ok && mesh != null)
+        {
+            LoadMesh(mesh);
+            FileErrorMessage = null;
+        }
+        else
+        {
+            FileErrorMessage = $"Erreur lors du chargement du fichier : \ncode : {result.code} \nmessage : {result.message}";
+        }
+    }
+
+}
 
 
-
-
+public partial class PieceViewModel : BaseViewModel
+{
+    public PieceViewModel(DMesh3 mesh, double sizeX, double sizeY, double sizeZ, 
+    double marginX, double marginY, double marginZ, IPieceWindowService pieceWindowService)
+        : base(pieceWindowService)
+    {
+        PrintSizeX = sizeX;
+        PrintSizeY = sizeY;
+        PrintSizeZ = sizeZ;
+        MarginX = marginX;
+        MarginY = marginY;
+        MarginZ = marginZ;
+        LoadMesh(mesh);
+    }
+}
 
