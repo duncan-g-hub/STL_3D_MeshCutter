@@ -196,7 +196,7 @@ Volume : {DisplayVolume(m)}
 
 
 
-public partial class MainViewModel : BaseViewModel
+public partial class FileViewModel : BaseViewModel
 {
     [ObservableProperty]
     private string? _fileErrorMessage;
@@ -205,7 +205,7 @@ public partial class MainViewModel : BaseViewModel
 
    
 
-    public MainViewModel(IFileDialogService fileDialogService, IPieceWindowService pieceWindowService)
+    public FileViewModel(IFileDialogService fileDialogService, IPieceWindowService pieceWindowService)
         : base(pieceWindowService)
     {
         _fileDialogService = fileDialogService;
@@ -240,6 +240,9 @@ public partial class MainViewModel : BaseViewModel
 
 public partial class PieceViewModel : BaseViewModel
 {
+    [ObservableProperty]
+    private string? _saveErrorMessage;
+
     public PieceViewModel(DMesh3 mesh, double sizeX, double sizeY, double sizeZ, 
     double marginX, double marginY, double marginZ, IPieceWindowService pieceWindowService)
         : base(pieceWindowService)
@@ -251,6 +254,12 @@ public partial class PieceViewModel : BaseViewModel
         MarginY = marginY;
         MarginZ = marginZ;
         LoadMesh(mesh);
+    }
+
+    [RelayCommand]
+    public void SaveFile()
+    {
+        // a venir
     }
 }
 
