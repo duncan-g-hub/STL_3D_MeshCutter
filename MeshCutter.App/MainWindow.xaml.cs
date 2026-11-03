@@ -13,7 +13,8 @@ public partial class MainWindow : Window
         _viewModel = viewModel;
         InitializeComponent();
         DataContext = _viewModel;
-        _viewModel.PropertyChanged += OnViewModelPropertyChanged;     
+        _viewModel.PropertyChanged += OnViewModelPropertyChanged;
+        ZoomToModel(_viewModel.Mesh);     
     }
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
