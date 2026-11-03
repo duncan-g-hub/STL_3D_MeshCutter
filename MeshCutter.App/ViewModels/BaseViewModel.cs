@@ -90,7 +90,6 @@ public abstract partial class BaseViewModel : ObservableObject
                 (MeshBottom, MeshTop, MeshBase) = MeshSlicer.Cut(MeshBase, origin, normal);
                 SlicerErrorMessage = null;
 
-                // appel de la gestion pour ouvrir les deux nouvelles fenetre en leur passant les nouvelles mesh 
                 _pieceWindowService.OpenSlicedPiece(MeshBottom, PrintSizeX, PrintSizeY, PrintSizeZ, MarginX, MarginY, MarginZ);
                 _pieceWindowService.OpenSlicedPiece(MeshTop, PrintSizeX, PrintSizeY, PrintSizeZ, MarginX, MarginY, MarginZ);
             }

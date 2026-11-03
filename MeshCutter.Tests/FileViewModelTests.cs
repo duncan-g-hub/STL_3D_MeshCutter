@@ -123,6 +123,11 @@ public class FileViewModelTests
         Assert.Equal(1, viewModel.PiecesY);
         Assert.Equal(1, viewModel.PiecesZ);
 
+        var firstMeshBase = viewModel.MeshBase;
+        var firstMesh = viewModel.Mesh;
+        Assert.NotNull(firstMeshBase);
+        Assert.NotNull(firstMesh);
+
         string pathError = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm error.STL");
         viewModel.LoadFile(pathError);
         Assert.NotNull(viewModel.Mesh);
@@ -134,7 +139,9 @@ public class FileViewModelTests
         Assert.Equal(1, viewModel.PiecesX);
         Assert.Equal(1, viewModel.PiecesY);
         Assert.Equal(1, viewModel.PiecesZ);
-        Assert.NotNull(viewModel.MeshBase);
+
+        Assert.Same(firstMeshBase, viewModel.MeshBase);
+        Assert.Same(firstMesh, viewModel.Mesh);
     }
 
     [Fact]
@@ -413,7 +420,7 @@ public class FileViewModelTests
         viewModel.SlicerAxis = Axis.Z;
         viewModel.SlicerPosition = 100;
         viewModel.CutMesh();
-        Assert.NotNull(viewModel.SlicerErrorMessage);
+        Assert.Equal("La position du plan de découpe doit être au sein du modèle, au maximum à une distance valide du bord.", viewModel.SlicerErrorMessage);
         Assert.NotNull(viewModel.MeshBottom);
         Assert.Equal(0, viewModel.MeshBottom.GetBounds().Min.z, 1e-3);
         Assert.Equal(25, viewModel.MeshBottom.GetBounds().Max.z, 1e-3);

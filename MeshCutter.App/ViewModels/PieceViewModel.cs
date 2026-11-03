@@ -14,6 +14,8 @@ public partial class PieceViewModel : BaseViewModel
     double marginX, double marginY, double marginZ, IPieceWindowService pieceWindowService)
         : base(pieceWindowService)
     {
+        // Printer settings first, mesh last: _meshInfo is still null while these are assigned,
+        // so Recalculate() does nothing. LoadMesh then runs a single real calculation.
         PrintSizeX = sizeX;
         PrintSizeY = sizeY;
         PrintSizeZ = sizeZ;
