@@ -7,7 +7,6 @@ using MeshCutter.Core;
 
 namespace MeshCutter.App.ViewModels;
 
-
 public abstract partial class BaseViewModel : ObservableObject
 {
     [ObservableProperty]
