@@ -42,7 +42,7 @@ public abstract partial class BaseViewModel : ObservableObject
     [ObservableProperty]
     private double _slicerPosition = 5;
     [ObservableProperty]
-    private DMesh3? _meshBase;
+    private DMesh3? _currentMesh;
     [ObservableProperty]
     private DMesh3? _meshBottom;
     [ObservableProperty]
@@ -60,7 +60,7 @@ public abstract partial class BaseViewModel : ObservableObject
 
     protected void LoadMesh(DMesh3 mesh)
     {
-        MeshBase = mesh;
+        CurrentMesh = mesh;
         _meshInfo = MeshInfo.GetMeshInfo(mesh);
         Informations = GetModelInfos();
         Mesh = Converter.MeshConverter(mesh);
@@ -77,17 +77,17 @@ public abstract partial class BaseViewModel : ObservableObject
     [RelayCommand]
     public void CutMesh()
     {
-        if (MeshBase != null)
+        if (CurrentMesh != null)
         {
             var (origin, normal) = GetOriginAndNormal();
-            var error = SlicerValidator.Validate(origin, normal, MeshBase.GetBounds(), Settings.MinThickness, MeshBase.IsClosed());
+            var error = SlicerValidator.Validate(origin, normal, CurrentMesh.GetBounds(), Settings.MinThickness, CurrentMesh.IsClosed());
             if (error != null)
             {
                 SlicerErrorMessage = SlicerErrorFormatter.Format(error);
             }
             else
             {
-                (MeshBottom, MeshTop, MeshBase) = MeshSlicer.Cut(MeshBase, origin, normal);
+                (MeshBottom, MeshTop, CurrentMesh) = MeshSlicer.Cut(CurrentMesh, origin, normal);
                 SlicerErrorMessage = null;
 
                 _pieceWindowService.OpenSlicedPiece(MeshBottom, PrintSizeX, PrintSizeY, PrintSizeZ, MarginX, MarginY, MarginZ);

@@ -123,7 +123,7 @@ public class FileViewModelTests
         Assert.Equal(1, viewModel.PiecesY);
         Assert.Equal(1, viewModel.PiecesZ);
 
-        var firstMeshBase = viewModel.MeshBase;
+        var firstMeshBase = viewModel.CurrentMesh;
         var firstMesh = viewModel.Mesh;
         Assert.NotNull(firstMeshBase);
         Assert.NotNull(firstMesh);
@@ -140,7 +140,7 @@ public class FileViewModelTests
         Assert.Equal(1, viewModel.PiecesY);
         Assert.Equal(1, viewModel.PiecesZ);
 
-        Assert.Same(firstMeshBase, viewModel.MeshBase);
+        Assert.Same(firstMeshBase, viewModel.CurrentMesh);
         Assert.Same(firstMesh, viewModel.Mesh);
     }
 
@@ -214,7 +214,7 @@ public class FileViewModelTests
         Assert.Null(viewModel.SlicerErrorMessage);
         Assert.Null(viewModel.MeshBottom);
         Assert.Null(viewModel.MeshTop);
-        Assert.Null(viewModel.MeshBase);
+        Assert.Null(viewModel.CurrentMesh);
     }
 
     [Fact]
@@ -224,7 +224,7 @@ public class FileViewModelTests
         FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
         viewModel.OpenFile();
         
-        Assert.NotNull(viewModel.MeshBase);
+        Assert.NotNull(viewModel.CurrentMesh);
         viewModel.SlicerAxis = Axis.Z;
         viewModel.SlicerPosition = 25;
 
@@ -245,7 +245,7 @@ public class FileViewModelTests
         FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
         viewModel.OpenFile();
         
-        Assert.NotNull(viewModel.MeshBase);
+        Assert.NotNull(viewModel.CurrentMesh);
         viewModel.SlicerAxis = Axis.Z;
         viewModel.SlicerPosition = 25;
 
@@ -269,7 +269,7 @@ public class FileViewModelTests
         FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
         viewModel.OpenFile();
         
-        Assert.NotNull(viewModel.MeshBase);
+        Assert.NotNull(viewModel.CurrentMesh);
         viewModel.SlicerAxis = Axis.X;
         viewModel.SlicerPosition = 25;
 
@@ -292,7 +292,7 @@ public class FileViewModelTests
         FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
         viewModel.OpenFile();
         
-        Assert.NotNull(viewModel.MeshBase);
+        Assert.NotNull(viewModel.CurrentMesh);
         viewModel.SlicerAxis = Axis.Y;
         viewModel.SlicerPosition = 25;
 
@@ -316,7 +316,7 @@ public class FileViewModelTests
         FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
         viewModel.OpenFile();
         
-        Assert.NotNull(viewModel.MeshBase);
+        Assert.NotNull(viewModel.CurrentMesh);
         viewModel.SlicerAxis = Axis.Z;
         viewModel.SlicerPosition = 25;
 
@@ -333,7 +333,7 @@ public class FileViewModelTests
         Assert.NotNull(volumeTop);
         Assert.Equal(62500, volumeTop.Value, 1e-3);
 
-        var volumeInitial = MeshInfo.GetMeshInfo(viewModel.MeshBase).Volume;
+        var volumeInitial = MeshInfo.GetMeshInfo(viewModel.CurrentMesh).Volume;
         Assert.NotNull(volumeInitial);
         Assert.Equal(volumeInitial.Value, volumeBottom.Value + volumeTop.Value, 1e-3);
     }
@@ -345,7 +345,7 @@ public class FileViewModelTests
         FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
         viewModel.OpenFile();
         
-        Assert.NotNull(viewModel.MeshBase);
+        Assert.NotNull(viewModel.CurrentMesh);
         viewModel.SlicerAxis = Axis.Z;
         viewModel.SlicerPosition = 50;
 
@@ -368,7 +368,7 @@ public class FileViewModelTests
         FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
         viewModel.OpenFile();
         
-        Assert.NotNull(viewModel.MeshBase);
+        Assert.NotNull(viewModel.CurrentMesh);
         viewModel.SlicerAxis = Axis.Z;
         foreach (double bad in NotFiniteValues)
         {
@@ -387,7 +387,7 @@ public class FileViewModelTests
         FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
         viewModel.OpenFile();
 
-        Assert.NotNull(viewModel.MeshBase);
+        Assert.NotNull(viewModel.CurrentMesh);
         viewModel.SlicerAxis = Axis.Z;
         viewModel.SlicerPosition = 25;
         viewModel.CutMesh();
@@ -404,7 +404,7 @@ public class FileViewModelTests
         FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
         viewModel.OpenFile();
         
-        Assert.NotNull(viewModel.MeshBase);
+        Assert.NotNull(viewModel.CurrentMesh);
         viewModel.SlicerAxis = Axis.Z;
         viewModel.SlicerPosition = 25;
 

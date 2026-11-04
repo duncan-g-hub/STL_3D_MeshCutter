@@ -26,7 +26,7 @@ public class PieceViewModelTests
     {
         var (piece, _) = CreatePiece();
         Assert.NotNull(piece.Mesh);
-        Assert.NotNull(piece.MeshBase);
+        Assert.NotNull(piece.CurrentMesh);
         Assert.NotEqual("Informations : ", piece.Informations);
         Assert.Equal(80, piece.PrintSizeX);
         Assert.Equal(200, piece.PrintSizeY);
