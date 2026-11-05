@@ -49,7 +49,7 @@ public abstract partial class BaseViewModel : ObservableObject
     private DMesh3? _meshTop;
     [ObservableProperty]
     private string? _slicerErrorMessage;
-
+    
     private readonly IPieceWindowService _pieceWindowService;
 
 
@@ -117,7 +117,6 @@ public abstract partial class BaseViewModel : ObservableObject
         }
         return (origin, normal);
     }
-
 
     partial void OnPrintSizeXChanged(double value) => Recalculate();
     partial void OnPrintSizeYChanged(double value) => Recalculate();
