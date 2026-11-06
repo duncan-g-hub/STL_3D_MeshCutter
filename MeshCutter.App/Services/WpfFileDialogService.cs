@@ -15,4 +15,17 @@ public class WpfFileDialogService : IFileDialogService
         }
         return null;
     }
+
+    public string? GetSavePath(string stlName)
+    {
+        var fileDialog = new SaveFileDialog();
+        fileDialog.Filter = "STL files (*.STL)|*.STL";
+        fileDialog.DefaultExt = ".STL";
+        fileDialog.FileName = stlName;
+        if(fileDialog.ShowDialog() == true)
+        {
+            return fileDialog.FileName;
+        }
+        return null;
+    }
 }
