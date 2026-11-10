@@ -12,7 +12,7 @@ public partial class App : Application
         base.OnStartup(e);                          
 
         var fileDialogService = new WpfFileDialogService();
-        var pieceWindowService = new WpfPieceWindowService();
+        var pieceWindowService = new WpfPieceWindowService(fileDialogService);
         var fileViewModel = new FileViewModel(fileDialogService, pieceWindowService);  
         var window = new MainWindow(fileViewModel);   
         window.Show();

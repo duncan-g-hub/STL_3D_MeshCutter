@@ -10,7 +10,7 @@ public class FileViewModelTests
     [Fact]
     public void OpenFile_WhenUserCancels_ChangesNothing()
     {
-        FileViewModel viewModel = new(new FakeFileDialogService(null), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(null, null), new FakePieceWindowService());
         viewModel.OpenFile();
         Assert.Null(viewModel.Mesh);
         Assert.Null(viewModel.FileErrorMessage);
@@ -20,7 +20,7 @@ public class FileViewModelTests
     [Fact]
     public void OpenFile_WhenPathDoesNotExist_SetsErrorMessage()
     {
-        FileViewModel viewModel = new(new FakeFileDialogService("Wrong Path"), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService("Wrong Path", null), new FakePieceWindowService());
         viewModel.OpenFile();
         Assert.Null(viewModel.Mesh);
         Assert.NotNull(viewModel.FileErrorMessage);
@@ -31,7 +31,7 @@ public class FileViewModelTests
     public void OpenFile_WhenPathExist_GetMeshAndInfos()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
         Assert.NotNull(viewModel.Mesh);
         Assert.Null(viewModel.FileErrorMessage);
@@ -44,7 +44,7 @@ public class FileViewModelTests
     public void OpenFile_WhenFormatIsUnsupported_SetsErrorMessage()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.SLDPRT");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
         Assert.Null(viewModel.Mesh);
         Assert.NotNull(viewModel.FileErrorMessage);
@@ -55,7 +55,7 @@ public class FileViewModelTests
     public void OpenFile_WhenFileIsCorrupted_SetsErrorMessage()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm error.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
         Assert.Null(viewModel.Mesh);
         Assert.NotNull(viewModel.FileErrorMessage);
@@ -66,7 +66,7 @@ public class FileViewModelTests
     public void CutPlanMesh_WhenMeshSmallerThanPrintableVolume_ReturnOnePiece()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
         viewModel.PrintSizeX = 180;
         viewModel.MarginX = 40;
@@ -78,7 +78,7 @@ public class FileViewModelTests
     public void CutPlanMesh_WhenMeshBiggerThanPrintableVolume_ReturnTwoPieces()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
         viewModel.PrintSizeX = 80;
         viewModel.MarginX = 40;
@@ -90,7 +90,7 @@ public class FileViewModelTests
     public void CutPlanMesh_WhenPrintableVolumeEqualZero_SetsError()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
         viewModel.PrintSizeX = 0;
         viewModel.MarginX = 40;
@@ -105,7 +105,7 @@ public class FileViewModelTests
     [Fact]
     public void UpdateMarginsAndPrintableVolume_WhenNoFileLoaded_ReturnZeroPiece()
     {
-        FileViewModel viewModel = new(new FakeFileDialogService(null), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(null, null), new FakePieceWindowService());
         viewModel.PrintSizeX = 0;
         viewModel.MarginX = -5;
         Assert.Null(viewModel.PrintErrorMessage);
@@ -116,7 +116,7 @@ public class FileViewModelTests
     public void LoadFile_WhenSecondFileIsInvalid_KeepsFirstModel()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
         Assert.Null(viewModel.PrintErrorMessage);
         Assert.Equal(1, viewModel.PiecesX);
@@ -148,7 +148,7 @@ public class FileViewModelTests
     public void CutPlanMesh_WhenInvalidValueIsCorrected_ErrorDisappearsAndPiecesComeBack()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
 
         viewModel.PrintSizeX = 0;
@@ -164,7 +164,7 @@ public class FileViewModelTests
     public void CutPlanMesh_WhenSeveralValuesAreInvalid_ShowsAllErrors()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
 
         viewModel.PrintSizeX = 0;
@@ -180,7 +180,7 @@ public class FileViewModelTests
     public void CutPlanMesh_WhenPrintSizeIsNotANumber_SetsError()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
 
         viewModel.PrintSizeX = double.NaN;
@@ -195,7 +195,7 @@ public class FileViewModelTests
     public void CutPlanMesh_WhenMarginIsInfinite_SetsError()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
 
         viewModel.MarginY = double.PositiveInfinity;
@@ -209,7 +209,7 @@ public class FileViewModelTests
     [Fact]
     public void CutMesh_WhenNoFileLoaded_DoNothing()
     {
-        FileViewModel viewModel = new(new FakeFileDialogService(null), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(null, null), new FakePieceWindowService());
         viewModel.CutMesh();
         Assert.Null(viewModel.SlicerErrorMessage);
         Assert.Null(viewModel.MeshBottom);
@@ -221,7 +221,7 @@ public class FileViewModelTests
     public void CutMesh_WhenConfigurationIsValid_ReturnsClosedTopAndBottomMeshes()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
         
         Assert.NotNull(viewModel.CurrentMesh);
@@ -242,7 +242,7 @@ public class FileViewModelTests
     public void CutMeshOnZ_WhenConfigurationIsValid_ReturnsTopAndBottomBounds()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
         
         Assert.NotNull(viewModel.CurrentMesh);
@@ -266,7 +266,7 @@ public class FileViewModelTests
     public void CutMeshOnX_WhenConfigurationIsValid_ReturnsTopAndBottomBounds()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
         
         Assert.NotNull(viewModel.CurrentMesh);
@@ -289,7 +289,7 @@ public class FileViewModelTests
     public void CutMeshOnY_WhenConfigurationIsValid_ReturnsTopAndBottomBounds()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
         
         Assert.NotNull(viewModel.CurrentMesh);
@@ -313,7 +313,7 @@ public class FileViewModelTests
     public void CutMesh_WhenConfigurationIsValid_ReturnsValidVolumes()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
         
         Assert.NotNull(viewModel.CurrentMesh);
@@ -342,7 +342,7 @@ public class FileViewModelTests
     public void CutMesh_WhenSlicerPositionTooHigh_ReturnsFormattedError()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
         
         Assert.NotNull(viewModel.CurrentMesh);
@@ -365,7 +365,7 @@ public class FileViewModelTests
     public void CutMesh_WhenPositionIsNotNumber_ReturnsFormattedError()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
         
         Assert.NotNull(viewModel.CurrentMesh);
@@ -384,7 +384,7 @@ public class FileViewModelTests
     public void CutMesh_WhenMeshIsNotClosed_ReturnsFormattedError()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm trou.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
 
         Assert.NotNull(viewModel.CurrentMesh);
@@ -401,7 +401,7 @@ public class FileViewModelTests
     public void CutMesh_WhenSecondCutIsInvalid_KeepsFirstResults()
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
-        FileViewModel viewModel = new(new FakeFileDialogService(path), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), new FakePieceWindowService());
         viewModel.OpenFile();
         
         Assert.NotNull(viewModel.CurrentMesh);
@@ -432,7 +432,7 @@ public class FileViewModelTests
     [Fact]
     public void Choices_ReturnsThreeAxisChoicesWithFormattedNames()
     {
-        FileViewModel viewModel = new(new FakeFileDialogService(null), new FakePieceWindowService());
+        FileViewModel viewModel = new(new FakeFileDialogService(null, null), new FakePieceWindowService());
         Assert.Equal(3, viewModel.Choices.Count);
         Assert.Contains(new AxisChoice("Axe X", Axis.X), viewModel.Choices);
         Assert.Contains(new AxisChoice("Axe Y", Axis.Y), viewModel.Choices);
@@ -445,7 +445,7 @@ public class FileViewModelTests
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
         var fake = new FakePieceWindowService();
-        FileViewModel viewModel = new(new FakeFileDialogService(path), fake);
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), fake);
         viewModel.OpenFile();
         viewModel.SlicerAxis = Axis.Z;
         viewModel.SlicerPosition = 25;
@@ -460,7 +460,7 @@ public class FileViewModelTests
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
         var fake = new FakePieceWindowService();
-        FileViewModel viewModel = new(new FakeFileDialogService(path), fake);
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), fake);
         viewModel.OpenFile();
         viewModel.SlicerAxis = Axis.Z;
         viewModel.SlicerPosition = 25;
@@ -478,7 +478,7 @@ public class FileViewModelTests
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
         var fake = new FakePieceWindowService();
-        FileViewModel viewModel = new(new FakeFileDialogService(path), fake);
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), fake);
         viewModel.OpenFile();
         viewModel.PrintSizeX = 210;
         viewModel.PrintSizeY = 170;
@@ -508,7 +508,7 @@ public class FileViewModelTests
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
         var fake = new FakePieceWindowService();
-        FileViewModel viewModel = new(new FakeFileDialogService(path), fake);
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), fake);
         viewModel.OpenFile();
         viewModel.SlicerAxis = Axis.Z;
         viewModel.SlicerPosition = 100;
@@ -524,7 +524,7 @@ public class FileViewModelTests
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm trou.STL");
         var fake = new FakePieceWindowService();
-        FileViewModel viewModel = new(new FakeFileDialogService(path), fake);
+        FileViewModel viewModel = new(new FakeFileDialogService(path, null), fake);
         viewModel.OpenFile();
         viewModel.SlicerAxis = Axis.Z;
         viewModel.SlicerPosition = 25;
@@ -539,7 +539,7 @@ public class FileViewModelTests
     public void CutMesh_WhenNoFileLoaded_OpensNoWindow()
     {
         var fake = new FakePieceWindowService();
-        var viewModel = new FileViewModel(new FakeFileDialogService(null), fake);
+        var viewModel = new FileViewModel(new FakeFileDialogService(null, null), fake);
 
         viewModel.CutMesh();
 

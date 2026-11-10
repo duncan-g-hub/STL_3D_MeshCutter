@@ -4,9 +4,12 @@ namespace MeshCutter.Tests.Fakes;
 public class FakeFileDialogService : IFileDialogService
 {
     private string? _path;
-    public FakeFileDialogService(string? path)
+    public string? StlName { get; private set; }
+    private string? _savePath;
+    public FakeFileDialogService(string? path, string? savePath)
     {
         _path = path;
+        _savePath =  savePath;
     }
 
     public string? GetFilePath()
@@ -14,6 +17,9 @@ public class FakeFileDialogService : IFileDialogService
         return _path;
     }
 
-
-
+    public string? GetSavePath(string stlName)
+    {
+        StlName = stlName;
+        return _savePath;
+    }
 }
