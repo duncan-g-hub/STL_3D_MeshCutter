@@ -1,45 +1,41 @@
-
-
-
 using g3;
 
 namespace MeshCutter.Core;
-public class PieceHistory
+
+
+public record PieceHistory(string Id, string? ParentId, string Name, Axis? SlicerAxis, double? SlicerPosition, DMesh3 Mesh)
 {
-    //id, nom complet, id du parent, axe, position, dimensions, triangles
-    public string Id {get;}
-    public string Name {get;}
-    public Axis SlicerAxis {get;}
-    public double SlicerPosition {get;}
-    public DMesh3 Mesh {get;}
-    public AxisAlignedBox3d Bounds {get;}
-    public int Triangles {get;}
-    public double? Volume {get;}
+    public  MeshInfo GetInfo() => MeshInfo.GetMeshInfo(Mesh);
+}
 
-    public PieceHistory(string id, string name, Axis slicerAxis, double slicerPosition, DMesh3 mesh)
+public class History
+{
+    private int _idCounter = 0;
+    private readonly List<PieceHistory> _piecesHistory = new();
+    public IReadOnlyList<PieceHistory> Pieces => _piecesHistory;
+
+    public PieceHistory AddRoot(string name, DMesh3 mesh)
     {
-        Id = id;
-        Name = name;
-        SlicerAxis = slicerAxis;
-        SlicerPosition = slicerPosition;
-        Mesh = mesh;
-        Bounds = mesh.GetBounds();
-        Triangles = mesh.TriangleCount;
-        Volume = MeshInfo.GetMeshInfo(mesh).Volume;
+        _idCounter++;
+        var p = new PieceHistory("P" + _idCounter, null, name, null, null, mesh);
+        _piecesHistory.Add(p);
+        return p;
     }
 
-
-    public (PieceHistory bottom, PieceHistory top) GetSlicedPiecesHistory(PieceHistory parent, Axis slicerAxis, double slicerPosition, DMesh3 meshBottom, DMesh3 meshTop)
-    {
-        int parentIdInt = int.Parse(parent.Id.Replace("P",""));
-        string idBottom = "P" + parentIdInt + 1;
-        string idTop = "P" + parentIdInt + 2;
-        string nameBottom = parent.Name + " > " + slicerAxis + slicerPosition + " bottom";
-        string nameTop = parent.Name + " > " + slicerAxis + slicerPosition + " top";
-        PieceHistory bottom = new PieceHistory(idBottom, nameBottom, slicerAxis, slicerPosition, meshBottom);
-        PieceHistory top = new PieceHistory(idTop, nameTop, slicerAxis, slicerPosition, meshTop);
-        return(bottom, top);
+    public (PieceHistory pBottom, PieceHistory pTop) AddSlice(PieceHistory parent, Axis slicerAxis, double slicerPosition, DMesh3 meshBottom, DMesh3 meshTop)
+    {        
+        var pBottom = AddPiece(parent, slicerAxis, slicerPosition, meshBottom, "bottom");
+        var pTop = AddPiece(parent, slicerAxis, slicerPosition, meshTop, "top");
+        return (pBottom, pTop);
     }
 
-
+    private PieceHistory AddPiece(PieceHistory parent, Axis slicerAxis, double slicerPosition, DMesh3 mesh, string side)
+    {
+        _idCounter++;
+        string pId = "P" + _idCounter;
+        string pName = $"{parent.Name} > {slicerAxis} {slicerPosition} {side}";
+        var p = new PieceHistory(pId, parent.Id, pName, slicerAxis, slicerPosition, mesh);
+        _piecesHistory.Add(p);
+        return p;
+    }
 }
