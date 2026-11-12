@@ -17,7 +17,7 @@ public class History
     public PieceHistory AddRoot(string name, DMesh3 mesh)
     {
         _idCounter++;
-        var p = new PieceHistory("P" + _idCounter, null, name, null, null, mesh);
+        var p = new PieceHistory("P" + _idCounter, null, name + " origin", null, null, mesh);
         _piecesHistory.Add(p);
         return p;
     }
