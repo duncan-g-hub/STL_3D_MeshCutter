@@ -52,6 +52,11 @@ public abstract partial class BaseViewModel : ObservableObject
     
     private readonly IPieceWindowService _pieceWindowService;
 
+    [ObservableProperty]
+    private History? _history;
+    [ObservableProperty]
+    private PieceHistory? _currentPieceHistory;
+
 
     protected BaseViewModel(IPieceWindowService pieceWindowService)
     {
@@ -89,9 +94,12 @@ public abstract partial class BaseViewModel : ObservableObject
             {
                 (MeshBottom, MeshTop, CurrentMesh) = MeshSlicer.Cut(CurrentMesh, origin, normal);
                 SlicerErrorMessage = null;
-
-                _pieceWindowService.OpenSlicedPiece(MeshBottom, PrintSizeX, PrintSizeY, PrintSizeZ, MarginX, MarginY, MarginZ);
-                _pieceWindowService.OpenSlicedPiece(MeshTop, PrintSizeX, PrintSizeY, PrintSizeZ, MarginX, MarginY, MarginZ);
+                if(History != null && CurrentPieceHistory != null)
+                {
+                    var (historyBottom, historyTop) = History.AddSlice(CurrentPieceHistory, SlicerAxis, SlicerPosition, MeshBottom, MeshTop);
+                    _pieceWindowService.OpenSlicedPiece(MeshBottom, PrintSizeX, PrintSizeY, PrintSizeZ, MarginX, MarginY, MarginZ, historyBottom, History);
+                    _pieceWindowService.OpenSlicedPiece(MeshTop, PrintSizeX, PrintSizeY, PrintSizeZ, MarginX, MarginY, MarginZ, historyTop, History);
+                }
             }
         }
     }

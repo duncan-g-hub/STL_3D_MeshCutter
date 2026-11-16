@@ -3,6 +3,7 @@ using g3;
 using CommunityToolkit.Mvvm.Input;
 using MeshCutter.App.ViewModels.Interfaces;
 using MeshCutter.Core;
+using System.IO;
 
 namespace MeshCutter.App.ViewModels;
 
@@ -19,6 +20,7 @@ public partial class FileViewModel : BaseViewModel
         : base(pieceWindowService)
     {
         _fileDialogService = fileDialogService;
+        
     }
     
     [RelayCommand]
@@ -36,6 +38,8 @@ public partial class FileViewModel : BaseViewModel
         var (result, mesh) = MeshLoader.GetMeshFromSTLFile(path);
         if (result.code == IOCode.Ok && mesh != null)
         {
+            History = new History();
+            CurrentPieceHistory = History.AddRoot(Path.GetFileNameWithoutExtension(path), mesh);
             LoadMesh(mesh);
             FileErrorMessage = null;
         }

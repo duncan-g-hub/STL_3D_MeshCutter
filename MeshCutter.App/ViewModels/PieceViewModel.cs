@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using g3;
 using CommunityToolkit.Mvvm.Input;
 using MeshCutter.App.ViewModels.Interfaces;
+using MeshCutter.Core;
 
 namespace MeshCutter.App.ViewModels;
 
@@ -14,7 +15,7 @@ public partial class PieceViewModel : BaseViewModel
 
     public PieceViewModel(DMesh3 mesh, double sizeX, double sizeY, double sizeZ, 
     double marginX, double marginY, double marginZ,
-        IFileDialogService fileDialogService, IPieceWindowService pieceWindowService)
+        IFileDialogService fileDialogService, IPieceWindowService pieceWindowService, PieceHistory currentPieceHistory, History history)
         : base(pieceWindowService)
     {
         // Printer settings first, mesh last: _meshInfo is still null while these are assigned,
@@ -27,6 +28,8 @@ public partial class PieceViewModel : BaseViewModel
         MarginZ = marginZ;
         _fileDialogService = fileDialogService;
         LoadMesh(mesh);
+        CurrentPieceHistory = currentPieceHistory;
+        History = history;
     }
 
     [RelayCommand]
