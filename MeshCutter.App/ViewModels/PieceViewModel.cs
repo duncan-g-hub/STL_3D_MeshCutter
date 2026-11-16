@@ -15,7 +15,7 @@ public partial class PieceViewModel : BaseViewModel
 
     public PieceViewModel(DMesh3 mesh, double sizeX, double sizeY, double sizeZ, 
     double marginX, double marginY, double marginZ,
-        IFileDialogService fileDialogService, IPieceWindowService pieceWindowService, PieceHistory currentPieceHistory, History history)
+        IFileDialogService fileDialogService, IPieceWindowService pieceWindowService, PieceHistory currentPieceHistory, History sharedHistory)
         : base(pieceWindowService)
     {
         // Printer settings first, mesh last: _meshInfo is still null while these are assigned,
@@ -29,7 +29,7 @@ public partial class PieceViewModel : BaseViewModel
         _fileDialogService = fileDialogService;
         LoadMesh(mesh);
         CurrentPieceHistory = currentPieceHistory;
-        History = history;
+        SharedHistory = sharedHistory;
     }
 
     [RelayCommand]

@@ -38,8 +38,8 @@ public partial class FileViewModel : BaseViewModel
         var (result, mesh) = MeshLoader.GetMeshFromSTLFile(path);
         if (result.code == IOCode.Ok && mesh != null)
         {
-            History = new History();
-            CurrentPieceHistory = History.AddRoot(Path.GetFileNameWithoutExtension(path), mesh);
+            SharedHistory = new History();
+            CurrentPieceHistory = SharedHistory.AddRoot(Path.GetFileNameWithoutExtension(path), mesh);
             LoadMesh(mesh);
             FileErrorMessage = null;
         }

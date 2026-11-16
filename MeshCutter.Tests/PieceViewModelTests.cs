@@ -18,7 +18,7 @@ public class PieceViewModelTests
 
         var pieceFake = new FakePieceWindowService();
         var dialogFake = new FakeFileDialogService(path, savePath);
-        var piece = new PieceViewModel(fileFake.Calls[pieceIndex].Mesh, 80, 200, 150, 40, 60, 20, dialogFake, pieceFake);
+        var piece = new PieceViewModel(fileFake.Calls[pieceIndex].Mesh, 80, 200, 150, 40, 60, 20, dialogFake, pieceFake, fileFake.Calls[pieceIndex].CurrentPieceHistory, fileFake.Calls[pieceIndex].SharedHistory);
         return (piece, pieceFake, dialogFake);
     }
 

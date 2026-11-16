@@ -14,9 +14,9 @@ public class WpfPieceWindowService : IPieceWindowService
         _fileDialogService = fileDialogService;
     }
     public void OpenSlicedPiece(DMesh3 mesh, double sizeX, double sizeY, double sizeZ, 
-    double marginX, double marginY, double marginZ, PieceHistory currentPieceHistory, History history)
+    double marginX, double marginY, double marginZ, PieceHistory currentPieceHistory, History sharedHistory)
     {
-        var pieceViewModel = new PieceViewModel(mesh, sizeX, sizeY, sizeZ, marginX, marginY, marginZ, _fileDialogService, this, currentPieceHistory, history);
+        var pieceViewModel = new PieceViewModel(mesh, sizeX, sizeY, sizeZ, marginX, marginY, marginZ, _fileDialogService, this, currentPieceHistory, sharedHistory);
         var pieceWindow = new MainWindow(pieceViewModel);
         pieceWindow.Show();
     }
