@@ -253,4 +253,29 @@ public class PieceViewModelTests
         Assert.Equal("New Model.STL", dialog.StlName);
     }
 
+
+
+    [Fact]
+    public void CutMesh_WhenPieceIsCutAgain_RecordsTwoChildrenOfTheFirstChildren()
+    {
+        var (piece, fake, _) = CreatePiece();
+
+        piece.SlicerAxis = Axis.Y;
+        piece.SlicerPosition = 10;
+        piece.CutMesh();
+
+        Assert.Equal("P4", fake.Calls[0].CurrentPieceHistory.Id);
+        Assert.Equal("P2", fake.Calls[0].CurrentPieceHistory.ParentId);
+        Assert.Equal("cube 50mm origin > Z 25 bottom > Y 10 bottom", fake.Calls[0].CurrentPieceHistory.Name);
+
+        Assert.Equal("P5", fake.Calls[1].CurrentPieceHistory.Id);
+        Assert.Equal("P2", fake.Calls[1].CurrentPieceHistory.ParentId);
+        Assert.Equal("cube 50mm origin > Z 25 bottom > Y 10 top", fake.Calls[1].CurrentPieceHistory.Name);
+
+        Assert.Same(piece.SharedHistory, fake.Calls[0].SharedHistory);
+
+        Assert.NotNull(piece.SharedHistory);
+        Assert.Equal(5, piece.SharedHistory.Pieces.Count);
+    }
+
 }
