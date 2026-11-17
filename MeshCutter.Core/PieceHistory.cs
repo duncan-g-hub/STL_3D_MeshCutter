@@ -1,4 +1,5 @@
 using g3;
+using System.Globalization;
 
 namespace MeshCutter.Core;
 
@@ -33,7 +34,7 @@ public class History
     {
         _idCounter++;
         string pId = "P" + _idCounter;
-        string pName = $"{parent.Name} > {slicerAxis} {slicerPosition} {side}";
+        string pName = $"{parent.Name} > {slicerAxis} {slicerPosition.ToString(CultureInfo.InvariantCulture)} {side}";
         var p = new PieceHistory(pId, parent.Id, pName, slicerAxis, slicerPosition, mesh);
         _piecesHistory.Add(p);
         return p;

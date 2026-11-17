@@ -20,10 +20,16 @@
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type vm:PieceViewModel}">
-                <DockPanel> 
-                    <Button DockPanel.Dock="Left" Content="Save File" Command="{Binding SaveFileCommand}" Margin="5" Height="25" Width="60"/>
-                    <TextBlock Text="{Binding SaveErrorMessage}" TextWrapping="Wrap" Margin="5"/>
-                </DockPanel>
+                <StackPanel>
+                    <DockPanel> 
+                        <Button DockPanel.Dock="Left" Content="Save File" Command="{Binding SaveFileCommand}" Margin="5" Height="25" Width="60"/>
+                        <TextBlock Text="{Binding SaveErrorMessage}" TextWrapping="Wrap" Margin="5"/>
+                    </DockPanel>
+                    <DockPanel> 
+                        <Button DockPanel.Dock="Left" Content="Export History" Command="{Binding ExportHistoryCommand}" Margin="5" Height="25" Width="70"/>
+                        <TextBlock Text="{Binding ExportErrorMessage}" TextWrapping="Wrap" Margin="5"/>
+                    </DockPanel>
+                </StackPanel>
             </DataTemplate>
         </Window.Resources>
 

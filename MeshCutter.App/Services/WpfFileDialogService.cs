@@ -28,4 +28,17 @@ public class WpfFileDialogService : IFileDialogService
         }
         return null;
     }
+
+    public string? GetExportPath(string exportName)
+    {
+        var fileDialog = new SaveFileDialog();
+        fileDialog.Filter = "CSV files (*.CSV)|*.CSV";
+        fileDialog.DefaultExt = ".CSV";
+        fileDialog.FileName = exportName;
+        if(fileDialog.ShowDialog() == true)
+        {
+            return fileDialog.FileName;
+        }
+        return null;
+    }
 }
