@@ -10,14 +10,14 @@ public class PieceViewModelTests
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
         var fileFake = new FakePieceWindowService();
-        var fileViewModel = new FileViewModel(new FakeFileDialogService(path, null), fileFake);
+        var fileViewModel = new FileViewModel(new FakeFileDialogService(path, null, null), fileFake);
         fileViewModel.OpenFile();
         fileViewModel.SlicerAxis = axis;
         fileViewModel.SlicerPosition = position;
         fileViewModel.CutMesh();
 
         var pieceFake = new FakePieceWindowService();
-        var dialogFake = new FakeFileDialogService(path, savePath);
+        var dialogFake = new FakeFileDialogService(path, savePath, null);
         var piece = new PieceViewModel(fileFake.Calls[pieceIndex].Mesh, 80, 200, 150, 40, 60, 20, dialogFake, pieceFake, fileFake.Calls[pieceIndex].CurrentPieceHistory, fileFake.Calls[pieceIndex].SharedHistory);
         return (piece, pieceFake, dialogFake);
     }
