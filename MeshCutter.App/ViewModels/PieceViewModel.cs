@@ -81,7 +81,7 @@ public partial class PieceViewModel : BaseViewModel
                 }
                 catch (IOException ex)
                 {
-                    ExportErrorMessage = $"Impossible d'écrire l'étiquette : {ex.Message}";
+                    ExportErrorMessage = $"Impossible d'écrire le fichier CSV : {ex.Message}";
                 }
                 catch (UnauthorizedAccessException ex)
                 {

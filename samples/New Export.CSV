@@ -1,10 +1,6 @@
 ID;Parent ID;Name;SizeX;SizeY;SizeZ;Triangles;Volume
 P1;;cube 50mm origin;50;50;50;12;125000
-P2;P1;cube 50mm origin > Z 25 bottom;50;50;25;22;62500
-P3;P1;cube 50mm origin > Z 25 top;50;50;25;22;62500
-P4;P3;cube 50mm origin > Z 25 top > Y 12 bottom;50;12;25;28;15000
-P5;P3;cube 50mm origin > Z 25 top > Y 12 top;50;38;25;34;47500
-P6;P5;cube 50mm origin > Z 25 top > Y 12 top > X 5 bottom;5;38;25;34;4750
-P7;P5;cube 50mm origin > Z 25 top > Y 12 top > X 5 top;45;38;25;48;42750
-P8;P5;cube 50mm origin > Z 25 top > Y 12 top > X 5,5 bottom;5,5;38;25;34;5225
-P9;P5;cube 50mm origin > Z 25 top > Y 12 top > X 5,5 top;44,5;38;25;48;42274,999999999985
+P2;P1;cube 50mm origin > Y 5 bottom;50;5;50;22;12500
+P3;P1;cube 50mm origin > Y 5 top;50;45;50;22;112500
+P4;P2;cube 50mm origin > Y 5 bottom > Z 25.6 bottom;50;5;25.600000000000005;34;6400
+P5;P2;cube 50mm origin > Y 5 bottom > Z 25.6 top;50;5;24.4;32;6100
