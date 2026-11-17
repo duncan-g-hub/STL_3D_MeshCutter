@@ -26,7 +26,7 @@
                         <TextBlock Text="{Binding SaveErrorMessage}" TextWrapping="Wrap" Margin="5"/>
                     </DockPanel>
                     <DockPanel> 
-                        <Button DockPanel.Dock="Left" Content="Export History" Command="{Binding ExportHistoryCommand}" Margin="5" Height="25" Width="70"/>
+                        <Button DockPanel.Dock="Left" Content="Export History" Command="{Binding ExportHistoryCommand}" Margin="5" Height="25" Width="90"/>
                         <TextBlock Text="{Binding ExportErrorMessage}" TextWrapping="Wrap" Margin="5"/>
                     </DockPanel>
                 </StackPanel>
