@@ -18,7 +18,11 @@ public class PieceViewModelTests
         fileViewModel.CutMesh();
 
         var pieceFake = new FakePieceWindowService();
+<<<<<<< HEAD
         var dialogFake = new FakeFileDialogService(path, savePath, exportPath);
+=======
+        var dialogFake = new FakeFileDialogService(path, savePath, null);
+>>>>>>> d90985ab4200388baf98311bd5b3159bf1566db5
         var piece = new PieceViewModel(fileFake.Calls[pieceIndex].Mesh, 80, 200, 150, 40, 60, 20, dialogFake, pieceFake, fileFake.Calls[pieceIndex].CurrentPieceHistory, fileFake.Calls[pieceIndex].SharedHistory);
         return (piece, pieceFake, dialogFake);
     }
