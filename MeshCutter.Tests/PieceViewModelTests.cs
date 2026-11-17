@@ -1,23 +1,24 @@
 using MeshCutter.App.ViewModels;
 using MeshCutter.Core;
 using MeshCutter.Tests.Fakes;
+using MeshCutter.App;
 
 namespace MeshCutter.Tests;
 
 public class PieceViewModelTests
 {
-    private static (PieceViewModel Piece, FakePieceWindowService Fake, FakeFileDialogService Dialog) CreatePiece(string? savePath = null, Axis axis = Axis.Z, double position = 25, int pieceIndex = 0)
+    private static (PieceViewModel Piece, FakePieceWindowService Fake, FakeFileDialogService Dialog) CreatePiece(string? savePath = null, Axis axis = Axis.Z, double position = 25, int pieceIndex = 0, string? exportPath = null)
     {
         string path = Path.Combine(AppContext.BaseDirectory, "samples", "cube 50mm.STL");
         var fileFake = new FakePieceWindowService();
-        var fileViewModel = new FileViewModel(new FakeFileDialogService(path, null), fileFake);
+        var fileViewModel = new FileViewModel(new FakeFileDialogService(path, null, null), fileFake);
         fileViewModel.OpenFile();
         fileViewModel.SlicerAxis = axis;
         fileViewModel.SlicerPosition = position;
         fileViewModel.CutMesh();
 
         var pieceFake = new FakePieceWindowService();
-        var dialogFake = new FakeFileDialogService(path, savePath);
+        var dialogFake = new FakeFileDialogService(path, savePath, exportPath);
         var piece = new PieceViewModel(fileFake.Calls[pieceIndex].Mesh, 80, 200, 150, 40, 60, 20, dialogFake, pieceFake, fileFake.Calls[pieceIndex].CurrentPieceHistory, fileFake.Calls[pieceIndex].SharedHistory);
         return (piece, pieceFake, dialogFake);
     }
@@ -277,5 +278,82 @@ public class PieceViewModelTests
         Assert.NotNull(piece.SharedHistory);
         Assert.Equal(5, piece.SharedHistory.Pieces.Count);
     }
+
+    [Fact]
+    public void ExportHistory_WhenPathIsValid_WritesTheCsvOfTheWholeHistory()
+    {
+        string exportPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".csv");
+        var (piece, _, _) = CreatePiece(exportPath: exportPath);
+        try
+        {
+            piece.ExportHistory();
+
+            Assert.Null(piece.ExportErrorMessage);
+            Assert.True(File.Exists(exportPath));
+
+            string content = File.ReadAllText(exportPath);
+            Assert.NotNull(piece.SharedHistory);
+            Assert.Equal(CsvHistoryFormatter.Format(piece.SharedHistory.Pieces), content);
+
+            // le test ci-dessus ne détecterait pas un Format cassé : on vérifie aussi un contenu précis
+            var lines = content.ReplaceLineEndings("\n").TrimEnd('\n').Split('\n');
+            Assert.Equal(4, lines.Length); // en-tête + P1, P2, P3
+            Assert.StartsWith("P1;;cube 50mm origin;", lines[1]);
+            Assert.StartsWith("P2;P1;cube 50mm origin > Z 25 bottom;", lines[2]);
+        }
+        finally
+        {
+            File.Delete(exportPath);
+        }
+    }
+
+    [Fact]
+    public void ExportHistory_WhenUserCancels_DoesNotSetError()
+    {
+        var (piece, _, dialog) = CreatePiece(exportPath: null);
+
+        piece.ExportHistory();
+
+        Assert.Equal("New Export.CSV", dialog.ExportName);
+        Assert.Null(piece.ExportErrorMessage);
+    }
+
+    [Fact]
+    public void ExportHistory_WhenDirectoryDoesNotExist_SetsErrorMessage()
+    {
+        string dir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        string exportPath = Path.Combine(dir, "export.csv");
+        var (piece, _, _) = CreatePiece(exportPath: exportPath);
+
+        piece.ExportHistory();
+
+        Assert.NotNull(piece.ExportErrorMessage);
+        Assert.False(File.Exists(exportPath));
+    }
+
+    [Fact]
+    public void ExportHistory_WhenSucceedsAfterAFailure_ClearsErrorMessage()
+    {
+        string dir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        string exportPath = Path.Combine(dir, "export.csv");
+        var (piece, _, _) = CreatePiece(exportPath: exportPath);
+        try
+        {
+            piece.ExportHistory();                 // échec : le dossier n'existe pas
+            Assert.NotNull(piece.ExportErrorMessage);
+
+            Directory.CreateDirectory(dir);        // même chemin, mais il est maintenant valide
+            piece.ExportHistory();
+
+            Assert.Null(piece.ExportErrorMessage);
+            Assert.True(File.Exists(exportPath));
+        }
+        finally
+        {
+            if (Directory.Exists(dir))
+                Directory.Delete(dir, true);
+        }
+    }
+
 
 }
