@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.Input;
 using MeshCutter.App.ViewModels.Interfaces;
 using MeshCutter.Core;
 using System.IO;
-using System.Diagnostics;
 
 namespace MeshCutter.App.ViewModels;
 
@@ -36,18 +35,13 @@ public partial class FileViewModel : BaseViewModel
 
     public void LoadFile(string path)
     {
-        
-        var stopwatch = Stopwatch.StartNew();
         var (result, mesh) = MeshLoader.GetMeshFromSTLFile(path);
-
-        stopwatch.Stop();
-        
         if (result.code == IOCode.Ok && mesh != null)
         {
             SharedHistory = new History();
             CurrentPieceHistory = SharedHistory.AddRoot(Path.GetFileNameWithoutExtension(path), mesh);
             LoadMesh(mesh);
-            FileErrorMessage = $"Load : {stopwatch.ElapsedMilliseconds} ms";
+            FileErrorMessage = null;
         }
         else
         {

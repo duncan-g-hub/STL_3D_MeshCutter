@@ -22,8 +22,6 @@ public partial class PieceViewModel : BaseViewModel
         IFileDialogService fileDialogService, IPieceWindowService pieceWindowService, PieceHistory currentPieceHistory, History sharedHistory)
         : base(pieceWindowService)
     {
-        // Printer settings first, mesh last: _meshInfo is still null while these are assigned,
-        // so Recalculate() does nothing. LoadMesh then runs a single real calculation.
         PrintSizeX = sizeX;
         PrintSizeY = sizeY;
         PrintSizeZ = sizeZ;

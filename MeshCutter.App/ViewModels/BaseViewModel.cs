@@ -4,7 +4,6 @@ using g3;
 using CommunityToolkit.Mvvm.Input;
 using MeshCutter.App.ViewModels.Interfaces;
 using MeshCutter.Core;
-using System.Diagnostics;
 
 namespace MeshCutter.App.ViewModels;
 
@@ -66,16 +65,10 @@ public abstract partial class BaseViewModel : ObservableObject
 
     protected void LoadMesh(DMesh3 mesh)
     {
-        var stopwatch = Stopwatch.StartNew();
         CurrentMesh = mesh;
         _meshInfo = MeshInfo.GetMeshInfo(mesh);
-        stopwatch.Stop();
-        PrintErrorMessage = $"Info : {stopwatch.ElapsedMilliseconds} ms";
         Informations = GetModelInfos();
-        var stopwatch2 = Stopwatch.StartNew();
         Mesh = Converter.MeshConverter(mesh);
-        stopwatch2.Stop();
-        PrintErrorMessage += $"Convert : {stopwatch2.ElapsedMilliseconds} ms";
         Recalculate();
     }
 
@@ -99,10 +92,8 @@ public abstract partial class BaseViewModel : ObservableObject
             }
             else
             {
-                var stopwatch = Stopwatch.StartNew();
                 (MeshBottom, MeshTop, CurrentMesh) = MeshSlicer.Cut(CurrentMesh, origin, normal);
-                stopwatch.Stop();
-                SlicerErrorMessage = $"Cut : {stopwatch.ElapsedMilliseconds} ms";
+                SlicerErrorMessage = null;
                 if(SharedHistory != null && CurrentPieceHistory != null)
                 {
                     var (historyBottom, historyTop) = SharedHistory.AddSlice(CurrentPieceHistory, SlicerAxis, SlicerPosition, MeshBottom, MeshTop);
@@ -162,7 +153,7 @@ public abstract partial class BaseViewModel : ObservableObject
                 PiecesX = cutPlanner.PiecesX;
                 PiecesY = cutPlanner.PiecesY;
                 PiecesZ = cutPlanner.PiecesZ;
-                // PrintErrorMessage = null;
+                PrintErrorMessage = null;
             }
         }
     }
