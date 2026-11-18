@@ -135,7 +135,8 @@
          
         
         
-        <helix:HelixViewport3D x:Name="Visualizer3D" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+        <helix:HelixViewport3D x:Name="Visualizer3D" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+            ViewCubeBackText = " +X " ViewCubeFrontText=" -X " ViewCubeLeftText=" -Y " ViewCubeRightText=" +Y " ViewCubeTopText=" +Z " ViewCubeBottomText=" -Z ">
             <helix:DefaultLights/>
             <!-- <helix:BoxVisual3D Length="60" Width="30" Height="90" Center="0,0,0">
             </helix:BoxVisual3D> -->
