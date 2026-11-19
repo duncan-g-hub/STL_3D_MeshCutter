@@ -57,10 +57,35 @@ public abstract partial class BaseViewModel : ObservableObject
     [ObservableProperty]
     private PieceHistory? _currentPieceHistory;
 
+    [ObservableProperty]
+    private AxisAlignedBox3d _printVolumeBox;
+    [ObservableProperty]
+    private AxisAlignedBox3d _utilBox;
+
+
 
     protected BaseViewModel(IPieceWindowService pieceWindowService)
     {
         _pieceWindowService = pieceWindowService;
+        GetBoxes();
+    }
+
+    private void GetBoxes()
+    {
+        var errors = SpaceValidator.Validate(PrintSizeX, PrintSizeY, PrintSizeZ, MarginX, MarginY, MarginZ);
+        if (errors.Count > 0)
+        {
+            PrintErrorMessage = SpaceErrorFormatter.Format(errors);
+        }
+        else
+        {
+            var margins = new Margins(MarginX, MarginY, MarginZ);
+            var printVolume = new PrintVolume(PrintSizeX, PrintSizeY, PrintSizeZ);
+            var (printVolumeBox, utilBox) = UtilVolumeBox.CreatePrintVolumeAndUtilBoxes(printVolume, margins);
+            PrintVolumeBox = printVolumeBox;
+            UtilBox = utilBox;
+            PrintErrorMessage = null;
+        }
     }
 
     protected void LoadMesh(DMesh3 mesh)
@@ -128,12 +153,19 @@ public abstract partial class BaseViewModel : ObservableObject
         return (origin, normal);
     }
 
-    partial void OnPrintSizeXChanged(double value) => Recalculate();
-    partial void OnPrintSizeYChanged(double value) => Recalculate();
-    partial void OnPrintSizeZChanged(double value) => Recalculate();
-    partial void OnMarginXChanged(double value) => Recalculate();
-    partial void OnMarginYChanged(double value) => Recalculate();
-    partial void OnMarginZChanged(double value) => Recalculate();
+    partial void OnPrintSizeXChanged(double value) => UpdatePrinterSpace();   
+    partial void OnPrintSizeYChanged(double value) => UpdatePrinterSpace();
+    partial void OnPrintSizeZChanged(double value) => UpdatePrinterSpace();
+    partial void OnMarginXChanged(double value) => UpdatePrinterSpace();
+    partial void OnMarginYChanged(double value) => UpdatePrinterSpace();
+    partial void OnMarginZChanged(double value) => UpdatePrinterSpace();
+
+
+    private void UpdatePrinterSpace()
+    {
+        Recalculate(); 
+        GetBoxes();
+    }
 
     private void Recalculate()
     {
