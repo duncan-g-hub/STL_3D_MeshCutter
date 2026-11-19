@@ -20,7 +20,6 @@ public partial class FileViewModel : BaseViewModel
         : base(pieceWindowService)
     {
         _fileDialogService = fileDialogService;
-        
     }
     
     [RelayCommand]
@@ -38,6 +37,7 @@ public partial class FileViewModel : BaseViewModel
         var (result, mesh) = MeshLoader.GetMeshFromSTLFile(path);
         if (result.code == IOCode.Ok && mesh != null)
         {
+            MoveMesh.CenterMesh(mesh);
             SharedHistory = new History();
             CurrentPieceHistory = SharedHistory.AddRoot(Path.GetFileNameWithoutExtension(path), mesh);
             LoadMesh(mesh);

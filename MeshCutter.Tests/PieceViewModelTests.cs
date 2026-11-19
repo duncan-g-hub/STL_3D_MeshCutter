@@ -62,8 +62,8 @@ public class PieceViewModelTests
         Assert.Equal(2, fake.Calls.Count);
         Assert.Equal(0, fake.Calls[0].Mesh.GetBounds().Min.z, 1e-3);
         Assert.Equal(10, fake.Calls[0].Mesh.GetBounds().Max.z, 1e-3);
-        Assert.Equal(10, fake.Calls[1].Mesh.GetBounds().Min.z, 1e-3);
-        Assert.Equal(25, fake.Calls[1].Mesh.GetBounds().Max.z, 1e-3);
+        Assert.Equal(0, fake.Calls[1].Mesh.GetBounds().Min.z, 1e-3);
+        Assert.Equal(15, fake.Calls[1].Mesh.GetBounds().Max.z, 1e-3);
     }
 
 
@@ -96,7 +96,7 @@ public class PieceViewModelTests
     {
         string savePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".stl");
 
-        var (piece, _, _) = CreatePiece(savePath, axis:Axis.Y, position:10, pieceIndex:0);
+        var (piece, _, _) = CreatePiece(savePath, axis:Axis.Y, position:0, pieceIndex:0);
         try
         {
             piece.SaveFile();
@@ -106,8 +106,8 @@ public class PieceViewModelTests
             var (result, mesh) = MeshLoader.GetMeshFromSTLFile(savePath);
             Assert.NotNull(mesh);
 
-            Assert.Equal(0, mesh.GetBounds().Min.y, 1e-3);
-            Assert.Equal(10, mesh.GetBounds().Max.y, 1e-3);
+            Assert.Equal(-12.5, mesh.GetBounds().Min.y, 1e-3);
+            Assert.Equal(12.5, mesh.GetBounds().Max.y, 1e-3);
         }
         finally
         {
@@ -120,7 +120,7 @@ public class PieceViewModelTests
     {
         string savePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".stl");
 
-        var (piece, _, _) = CreatePiece(savePath, axis:Axis.X, position:10, pieceIndex:0);
+        var (piece, _, _) = CreatePiece(savePath, axis:Axis.X, position:0, pieceIndex:0);
         try
         {
             piece.SaveFile();
@@ -130,8 +130,8 @@ public class PieceViewModelTests
             var (result, mesh) = MeshLoader.GetMeshFromSTLFile(savePath);
             Assert.NotNull(mesh);
 
-            Assert.Equal(0, mesh.GetBounds().Min.x, 1e-3);
-            Assert.Equal(10, mesh.GetBounds().Max.x, 1e-3);
+            Assert.Equal(-12.5, mesh.GetBounds().Min.x, 1e-3);
+            Assert.Equal(12.5, mesh.GetBounds().Max.x, 1e-3);
         }
         finally
         {
@@ -154,8 +154,8 @@ public class PieceViewModelTests
             var (result, mesh) = MeshLoader.GetMeshFromSTLFile(savePath);
             Assert.NotNull(mesh);
 
-            Assert.Equal(10, mesh.GetBounds().Min.z, 1e-3);
-            Assert.Equal(50, mesh.GetBounds().Max.z, 1e-3);
+            Assert.Equal(0, mesh.GetBounds().Min.z, 1e-3);
+            Assert.Equal(40, mesh.GetBounds().Max.z, 1e-3);
         }
         finally
         {
@@ -168,7 +168,7 @@ public class PieceViewModelTests
     {
         string savePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".stl");
 
-        var (piece, _, _) = CreatePiece(savePath, axis:Axis.Y, position:10, pieceIndex:1);
+        var (piece, _, _) = CreatePiece(savePath, axis:Axis.Y, position:0, pieceIndex:1);
         try
         {
             piece.SaveFile();
@@ -178,8 +178,8 @@ public class PieceViewModelTests
             var (result, mesh) = MeshLoader.GetMeshFromSTLFile(savePath);
             Assert.NotNull(mesh);
 
-            Assert.Equal(10, mesh.GetBounds().Min.y, 1e-3);
-            Assert.Equal(50, mesh.GetBounds().Max.y, 1e-3);
+            Assert.Equal(-12.5, mesh.GetBounds().Min.y, 1e-3);
+            Assert.Equal(12.5, mesh.GetBounds().Max.y, 1e-3);
         }
         finally
         {
@@ -192,7 +192,7 @@ public class PieceViewModelTests
     {
         string savePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".stl");
 
-        var (piece, _, _) = CreatePiece(savePath, axis:Axis.X, position:10, pieceIndex:1);
+        var (piece, _, _) = CreatePiece(savePath, axis:Axis.X, position:0, pieceIndex:1);
         try
         {
             piece.SaveFile();
@@ -202,8 +202,8 @@ public class PieceViewModelTests
             var (result, mesh) = MeshLoader.GetMeshFromSTLFile(savePath);
             Assert.NotNull(mesh);
 
-            Assert.Equal(10, mesh.GetBounds().Min.x, 1e-3);
-            Assert.Equal(50, mesh.GetBounds().Max.x, 1e-3);
+            Assert.Equal(-12.5, mesh.GetBounds().Min.x, 1e-3);
+            Assert.Equal(12.5, mesh.GetBounds().Max.x, 1e-3);
         }
         finally
         {

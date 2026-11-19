@@ -93,6 +93,8 @@ public abstract partial class BaseViewModel : ObservableObject
             else
             {
                 (MeshBottom, MeshTop, CurrentMesh) = MeshSlicer.Cut(CurrentMesh, origin, normal);
+                MoveMesh.CenterMesh(MeshBottom);
+                MoveMesh.CenterMesh(MeshTop);
                 SlicerErrorMessage = null;
                 if(SharedHistory != null && CurrentPieceHistory != null)
                 {
