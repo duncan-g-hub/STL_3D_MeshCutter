@@ -51,7 +51,7 @@ public partial class FileViewModelTests
         FileViewModel viewModel = new(new FakeFileDialogService(null, null, null), new FakePieceWindowService());
         viewModel.PrintSizeX = 0;
         viewModel.MarginX = -5;
-        Assert.Null(viewModel.PrintErrorMessage);
+        Assert.NotNull(viewModel.PrintErrorMessage);
         Assert.Equal(0, viewModel.PiecesX);
     }
 
