@@ -31,6 +31,10 @@ public partial class MainWindow : Window
         _utilVolumeWireframe.Thickness = 2;
         Visualizer3D.Children.Add(_utilVolumeWireframe);
 
+        // The mesh is added back last so that it is drawn after the elements it is intended to reveal.
+        Visualizer3D.Children.Remove(MeshVisual);
+        Visualizer3D.Children.Add(MeshVisual);
+
         DataContext = _viewModel;
         _viewModel.PropertyChanged += OnViewModelPropertyChanged;   
         UpdateVolumeBox();

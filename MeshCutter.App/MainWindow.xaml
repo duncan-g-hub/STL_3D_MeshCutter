@@ -141,7 +141,14 @@
             <!-- <helix:BoxVisual3D Length="60" Width="30" Height="90" Center="0,0,0">
             </helix:BoxVisual3D> -->
 
-            <helix:MeshGeometryVisual3D MeshGeometry="{Binding Mesh}" />
+            <helix:MeshGeometryVisual3D x:Name="MeshVisual" MeshGeometry="{Binding Mesh}"> 
+                <helix:MeshGeometryVisual3D.Material>
+                    <DiffuseMaterial Brush="#50FFFFFF" />
+                </helix:MeshGeometryVisual3D.Material>
+                <helix:MeshGeometryVisual3D.BackMaterial>
+                    <DiffuseMaterial Brush="#4D7CFF" />
+                </helix:MeshGeometryVisual3D.BackMaterial>
+            </helix:MeshGeometryVisual3D>
         </helix:HelixViewport3D>
     </Grid>
 </Window>
