@@ -1,4 +1,5 @@
 using MeshCutter.Core;
+using g3;
 
 namespace MeshCutter.Tests;
 
@@ -7,7 +8,8 @@ public class CutPlannerTest
 
     public static MeshInfo GetFakeMeshInfo()
     {
-        return new MeshInfo(12, 20, 65, 120, 40, 21400, 132000, true);
+        var bounds = new AxisAlignedBox3d(-32.5, -60, 0, 32.5, 60, 40);
+        return new MeshInfo(12, 20, 65, 120, 40, bounds, 21400, 132000, true);
     }
     
     public static Margins GetFakeMargins()

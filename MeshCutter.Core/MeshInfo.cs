@@ -8,17 +8,31 @@ public class MeshInfo
     public double SizeX {get;}
     public double SizeY {get;}
     public double SizeZ {get;} 
+
+    public double MinX {get;}
+    public double MinY {get;}
+    public double MinZ {get;}
+    public double MaxX {get;}
+    public double MaxY {get;}
+    public double MaxZ {get;}
+
     public double Area {get;}
     public double? Volume {get;}
     public bool IsClosed {get;}
 
-    public MeshInfo(int vertexCount, int triangleCount, double sizeX, double sizeY, double sizeZ, double area, double? volume, bool isClosed)
+    public MeshInfo(int vertexCount, int triangleCount, double sizeX, double sizeY, double sizeZ, AxisAlignedBox3d bounds, double area, double? volume, bool isClosed)
     {
         VertexCount = vertexCount;
         TriangleCount = triangleCount;
         SizeX = sizeX;
         SizeY = sizeY;
         SizeZ = sizeZ;
+        MinX = bounds.Min.x;
+        MinY = bounds.Min.y;
+        MinZ = bounds.Min.z;
+        MaxX = bounds.Max.x;
+        MaxY = bounds.Max.y;
+        MaxZ = bounds.Max.z;
         Area = area;
         Volume = volume;
         IsClosed = isClosed;
@@ -36,6 +50,6 @@ public class MeshInfo
         var measures = MeshMeasurements.VolumeArea(mesh, mesh.TriangleIndices(), i => mesh.GetVertex(i));
         double area = measures[1];
         double volume = measures[0]; 
-        return new MeshInfo(vertexCount, triangleCount, sizeX, sizeY, sizeZ, area, meshIsClosed? volume : null, meshIsClosed);
+        return new MeshInfo(vertexCount, triangleCount, sizeX, sizeY, sizeZ, bounds, area, meshIsClosed? volume : null, meshIsClosed);
     }
 }

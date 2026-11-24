@@ -40,7 +40,7 @@ public abstract partial class BaseViewModel : ObservableObject
     [ObservableProperty]
     private Axis _slicerAxis = Axis.X;
     [ObservableProperty]
-    private double _slicerPosition = 5;
+    private double _slicerPosition = 0;
     [ObservableProperty]
     private DMesh3? _currentMesh;
     [ObservableProperty]
@@ -202,9 +202,12 @@ public abstract partial class BaseViewModel : ObservableObject
 Nombre de sommets : {m.VertexCount}
 Nombre de triangles : {m.TriangleCount}
 
-Longueur (x) : {RoundedValue(m.SizeX)}mm
-Hauteur (y) : {RoundedValue(m.SizeY)}mm
-Profondeur (z) : {RoundedValue(m.SizeZ)}mm
+Axe X : {RoundedValue(m.SizeX)}mm
+De {RoundedValue(m.MinX)}mm à {RoundedValue(m.MaxX)}mm
+Axe Y : {RoundedValue(m.SizeY)}mm
+De {RoundedValue(m.MinY)}mm à {RoundedValue(m.MaxY)}mm
+Axe Z : {RoundedValue(m.SizeZ)}mm
+De {RoundedValue(m.MinZ)}mm à {RoundedValue(m.MaxZ)}mm
 
 Superficie : {RoundedValue(m.Area)}mm²
 Volume : {DisplayVolume(m)}
