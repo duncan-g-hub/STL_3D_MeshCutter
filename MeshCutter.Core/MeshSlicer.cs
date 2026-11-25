@@ -1,4 +1,5 @@
 using g3;
+using gs;
 
 namespace MeshCutter.Core;
 
@@ -21,16 +22,17 @@ public class MeshSlicer
         meshCopyTop.Copy(meshBase);
 
         // découpe 
-
         // partie basse
         var cutBottom = new MeshPlaneCut(meshCopyBottom, origin , normal);
         cutBottom.Cut();
-        cutBottom.FillHoles();
+        var fillBottom = new PlanarHoleFiller(cutBottom);
+        fillBottom.Fill();
 
         // partie haute
         var cutTop = new MeshPlaneCut(meshCopyTop, origin , -normal);
         cutTop.Cut();
-        cutTop.FillHoles();
+        var fillTop = new PlanarHoleFiller(cutTop);
+        fillTop.Fill();
 
         return (meshCopyBottom, meshCopyTop, meshBase);
     }
