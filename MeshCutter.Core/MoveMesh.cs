@@ -17,6 +17,12 @@ public static class MoveMesh
 
     public static DMesh3 CopyAndRotateMesh(DMesh3 mesh, Axis axis, double rotationAngle)
     {
+        var error = AngleValidator.Validate(rotationAngle, mesh.IsClosed());
+        if (error != null)
+        {
+            throw new ArgumentException($"Invalid configuration: {error}");
+        }
+        
         var meshCopy = new DMesh3();
         meshCopy.Copy(mesh);
 
