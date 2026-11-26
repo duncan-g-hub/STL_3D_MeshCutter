@@ -151,21 +151,23 @@ public abstract partial class BaseViewModel : ObservableObject
         if (CurrentMesh != null)
         {
             double angle = ((RotationAngle % 360.0) + 360.0) % 360.0;
-
-            var error = AngleValidator.Validate(angle, CurrentMesh.IsClosed());
-            if (error != null)
+            if (angle != 0)
             {
-                RotateErrorMessage = AngleErrorFormatter.Format(error);
-            }
-            else
-            {
-                var rotatedMesh = MoveMesh.CopyAndRotateMesh(CurrentMesh, RotationAxis, angle);
-                MoveMesh.CenterMesh(rotatedMesh);
-                LoadMesh(rotatedMesh);
-                if(SharedHistory != null && CurrentPieceHistory != null)
+                var error = AngleValidator.Validate(angle, CurrentMesh.IsClosed());
+                if (error != null)
                 {
-                    var history = SharedHistory.AddRotation(CurrentPieceHistory, RotationAxis, angle, rotatedMesh);
-                    CurrentPieceHistory = history;
+                    RotateErrorMessage = AngleErrorFormatter.Format(error);
+                }
+                else
+                {
+                    var rotatedMesh = MoveMesh.CopyAndRotateMesh(CurrentMesh, RotationAxis, angle);
+                    MoveMesh.CenterMesh(rotatedMesh);
+                    LoadMesh(rotatedMesh);
+                    if(SharedHistory != null && CurrentPieceHistory != null)
+                    {
+                        var history = SharedHistory.AddRotation(CurrentPieceHistory, RotationAxis, angle, rotatedMesh);
+                        CurrentPieceHistory = history;
+                    }
                 }
             }
         }

@@ -1,6 +1,0 @@
-ID;Parent ID;Name;SizeX;SizeY;SizeZ;Triangles;Volume
-P1;;cube 50mm origin;50;50;50;12;125000
-P2;P1;cube 50mm origin > Y 5 bottom;50;5;50;22;12500
-P3;P1;cube 50mm origin > Y 5 top;50;45;50;22;112500
-P4;P2;cube 50mm origin > Y 5 bottom > Z 25.6 bottom;50;5;25.600000000000005;34;6400
-P5;P2;cube 50mm origin > Y 5 bottom > Z 25.6 top;50;5;24.4;32;6100

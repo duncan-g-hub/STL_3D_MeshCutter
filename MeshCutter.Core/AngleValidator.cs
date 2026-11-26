@@ -1,7 +1,4 @@
-using g3;
-
 namespace MeshCutter.Core;
-
 
 public enum AngleError
 {

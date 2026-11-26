@@ -33,7 +33,7 @@ public class History
     {
         _idCounter++;
         string pId = "P" + _idCounter;
-        string pName = $"{parent.Name} > {slicerAxis} {slicerPosition.ToString(CultureInfo.InvariantCulture)} {side}";
+        string pName = $"{parent.Name} > slice {slicerAxis} {slicerPosition.ToString(CultureInfo.InvariantCulture)} {side}";
         var p = new PieceHistory(pId, parent.Id, pName, slicerAxis, slicerPosition, null, mesh);
         _piecesHistory.Add(p);
         return p;
