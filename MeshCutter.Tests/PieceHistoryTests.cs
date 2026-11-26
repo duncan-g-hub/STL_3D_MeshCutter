@@ -42,13 +42,13 @@ public class PieceHistoryTests
 
         Assert.Equal("P2", pBottom.Id);
         Assert.Equal("P1", pBottom.ParentId);
-        Assert.Equal("cube origin > Z 25 bottom", pBottom.Name);
+        Assert.Equal("cube origin > slice Z 25 bottom", pBottom.Name);
         Assert.Equal(Axis.Z, pBottom.SlicerAxis);
         Assert.Equal(25, pBottom.SlicerPosition);
 
         Assert.Equal("P3", pTop.Id);
         Assert.Equal("P1", pTop.ParentId);
-        Assert.Equal("cube origin > Z 25 top", pTop.Name);
+        Assert.Equal("cube origin > slice Z 25 top", pTop.Name);
         Assert.Equal(Axis.Z, pTop.SlicerAxis);
         Assert.Equal(25, pTop.SlicerPosition);
 
@@ -87,8 +87,8 @@ public class PieceHistoryTests
 
         Assert.Equal(pBottom.Id, b1.ParentId);
         Assert.Equal(pTop.Id, b2.ParentId);
-        Assert.Equal("cube origin > Z 25 bottom > Y 10 top", t1.Name);
-        Assert.Equal("cube origin > Z 25 top > X 20 bottom", b2.Name);
+        Assert.Equal("cube origin > slice Z 25 bottom > slice Y 10 top", t1.Name);
+        Assert.Equal("cube origin > slice Z 25 top > slice X 20 bottom", b2.Name);
     }
 
     [Fact]

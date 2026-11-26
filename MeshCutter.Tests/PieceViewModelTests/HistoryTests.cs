@@ -24,7 +24,7 @@ public partial class PieceViewModelTests
             var lines = content.ReplaceLineEndings("\n").TrimEnd('\n').Split('\n');
             Assert.Equal(4, lines.Length); // en-tête + P1, P2, P3
             Assert.StartsWith("P1;;cube 50mm origin;", lines[1]);
-            Assert.StartsWith("P2;P1;cube 50mm origin > Z 25 bottom;", lines[2]);
+            Assert.StartsWith("P2;P1;cube 50mm origin > slice Z 25 bottom;", lines[2]);
         }
         finally
         {

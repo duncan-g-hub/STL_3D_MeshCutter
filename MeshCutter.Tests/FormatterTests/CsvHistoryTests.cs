@@ -7,7 +7,7 @@ namespace MeshCutter.Tests;
 
 public class CsvHistoryFormatterTests
 {
-    private const string Header = "ID;Parent ID;Name;SizeX;SizeY;SizeZ;Triangles;Volume";
+    private const string Header = "Piece ID;Parent ID;Name;SizeX;SizeY;SizeZ;Triangles;Volume";
 
     private static DMesh3 LoadCube()
     {
@@ -46,8 +46,8 @@ public class CsvHistoryFormatterTests
         Assert.Equal(4, lines.Length);
         Assert.Equal(Header, lines[0]);
         Assert.Equal("P1;;cube 50mm origin;50;50;50;12;125000", lines[1]);
-        Assert.Equal("P2;P1;cube 50mm origin > Z 25 bottom;50;50;25;20;62500", lines[2]);
-        Assert.Equal("P3;P1;cube 50mm origin > Z 25 top;50;50;25;20;62500", lines[3]);
+        Assert.Equal("P2;P1;cube 50mm origin > slice Z 25 bottom;50;50;25;20;62500", lines[2]);
+        Assert.Equal("P3;P1;cube 50mm origin > slice Z 25 top;50;50;25;20;62500", lines[3]);
     }
 
     [Fact]
@@ -71,9 +71,9 @@ public class CsvHistoryFormatterTests
     {
         var history = CutOnce("cube", Axis.X, 5.5);
         var lines = Lines(CsvHistoryFormatter.Format(history.Pieces));
-        Assert.Equal("P2;P1;cube origin > X 5.5 bottom;5.5;50;50;20;13750", lines[2]);
+        Assert.Equal("P2;P1;cube origin > slice X 5.5 bottom;5.5;50;50;20;13750", lines[2]);
         var cellsTop = lines[3].Split(';');
-        Assert.Equal("cube origin > X 5.5 top", cellsTop[2]);
+        Assert.Equal("cube origin > slice X 5.5 top", cellsTop[2]);
         Assert.Equal("44.5", cellsTop[3]);
         Assert.Equal(8, cellsTop.Length);
     }
@@ -87,7 +87,7 @@ public class CsvHistoryFormatterTests
             CultureInfo.CurrentCulture = new CultureInfo("fr-FR");
             var history = CutOnce("cube", Axis.X, 5.5);
             var lines = Lines(CsvHistoryFormatter.Format(history.Pieces));
-            Assert.Contains("X 5.5 bottom", lines[2]);
+            Assert.Contains("slice X 5.5 bottom", lines[2]);
             Assert.Equal("5.5", lines[2].Split(';')[3]);
         }
         finally

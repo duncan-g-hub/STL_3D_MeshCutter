@@ -20,11 +20,11 @@ public partial class FileViewModelTests
 
         Assert.Equal("P2", fake.Calls[0].CurrentPieceHistory.Id);
         Assert.Equal("P1", fake.Calls[0].CurrentPieceHistory.ParentId);
-        Assert.Equal("cube 50mm origin > Z 25 bottom", fake.Calls[0].CurrentPieceHistory.Name);
+        Assert.Equal("cube 50mm origin > slice Z 25 bottom", fake.Calls[0].CurrentPieceHistory.Name);
 
         Assert.Equal("P3", fake.Calls[1].CurrentPieceHistory.Id);
         Assert.Equal("P1", fake.Calls[1].CurrentPieceHistory.ParentId);
-        Assert.Equal("cube 50mm origin > Z 25 top", fake.Calls[1].CurrentPieceHistory.Name);
+        Assert.Equal("cube 50mm origin > slice Z 25 top", fake.Calls[1].CurrentPieceHistory.Name);
 
         Assert.Same(viewModel.SharedHistory, fake.Calls[0].SharedHistory);
 
