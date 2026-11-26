@@ -3,8 +3,7 @@ using System.Globalization;
 
 namespace MeshCutter.Core;
 
-
-public record PieceHistory(string Id, string? ParentId, string Name, Axis? SlicerAxis, double? SlicerPosition, DMesh3 Mesh)
+public record PieceHistory(string Id, string? ParentId, string Name, Axis? SlicerAxis, double? SlicerPosition, double? RotationAngle, DMesh3 Mesh)
 {
     public  MeshInfo GetInfo() => MeshInfo.GetMeshInfo(Mesh);
 }
@@ -18,7 +17,7 @@ public class History
     public PieceHistory AddRoot(string name, DMesh3 mesh)
     {
         _idCounter++;
-        var p = new PieceHistory("P" + _idCounter, null, name + " origin", null, null, mesh);
+        var p = new PieceHistory("P" + _idCounter, null, name + " origin", null, null, null, mesh);
         _piecesHistory.Add(p);
         return p;
     }
@@ -35,8 +34,19 @@ public class History
         _idCounter++;
         string pId = "P" + _idCounter;
         string pName = $"{parent.Name} > {slicerAxis} {slicerPosition.ToString(CultureInfo.InvariantCulture)} {side}";
-        var p = new PieceHistory(pId, parent.Id, pName, slicerAxis, slicerPosition, mesh);
+        var p = new PieceHistory(pId, parent.Id, pName, slicerAxis, slicerPosition, null, mesh);
         _piecesHistory.Add(p);
         return p;
     }
+
+    public PieceHistory AddRotation(PieceHistory parent, Axis rotationAxis, double rotationAngle, DMesh3 meshRotate)
+    {        
+        _idCounter++;
+        string pId = "P" + _idCounter;
+        string pName = $"{parent.Name} > rotate {rotationAxis} {rotationAngle.ToString(CultureInfo.InvariantCulture)}";
+        var p = new PieceHistory(pId, parent.Id, pName, rotationAxis, null, rotationAngle, meshRotate);
+        _piecesHistory.Add(p);
+        return p;
+    }
+
 }

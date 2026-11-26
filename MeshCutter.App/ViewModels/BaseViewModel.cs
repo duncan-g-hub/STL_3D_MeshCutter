@@ -62,6 +62,12 @@ public abstract partial class BaseViewModel : ObservableObject
     [ObservableProperty]
     private AxisAlignedBox3d _utilBox;
 
+    [ObservableProperty]
+    private Axis _rotationAxis = Axis.X;
+    [ObservableProperty]
+    private double _rotationAngle = 0.0;
+    // [ObservableProperty]
+    // private string? _rotateErrorMessage;
 
 
     protected BaseViewModel(IPieceWindowService pieceWindowService)
@@ -138,6 +144,35 @@ public abstract partial class BaseViewModel : ObservableObject
             }
         }
     }
+
+    [RelayCommand]
+    public void RotateMesh()
+    {
+        if (CurrentMesh != null)
+        {
+            double angle = ((RotationAngle % 360.0) + 360.0) % 360.0;
+
+            // Gestion error angle cas NAn et Infini et mesh not closed dans un second temps 
+            // var error = AngleValidator.Validate(angle, CurrentMesh.IsClosed());
+            // if (error != null)
+            // {
+            //     RotateErrorMessage = AngleErrorFormatter.Format(error);
+            // }
+            // else
+            {
+                var rotatedMesh = MoveMesh.CopyAndRotateMesh(CurrentMesh, RotationAxis, angle);
+                MoveMesh.CenterMesh(rotatedMesh);
+                LoadMesh(rotatedMesh);
+                
+                if(SharedHistory != null && CurrentPieceHistory != null)
+                {
+                    var history = SharedHistory.AddRotation(CurrentPieceHistory, RotationAxis, angle, rotatedMesh);
+                    CurrentPieceHistory = history;
+                }
+            }
+        }
+    }
+    
 
     private (Vector3d, Vector3d) GetOriginAndNormal()
     {
