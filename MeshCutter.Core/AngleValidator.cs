@@ -2,7 +2,7 @@ namespace MeshCutter.Core;
 
 public enum AngleError
 {
-    AngleNotADegree = 1, MeshIsNotClosed = 2
+    AngleNotANumber = 1, MeshIsNotClosed = 2
 }
 
 public static class AngleValidator
@@ -15,7 +15,7 @@ public static class AngleValidator
         }
         if (!double.IsFinite(angle))
         {
-            return AngleError.AngleNotADegree;
+            return AngleError.AngleNotANumber;
         }
         return null;
     }

@@ -160,6 +160,7 @@ public abstract partial class BaseViewModel : ObservableObject
                 }
                 else
                 {
+                    RotateErrorMessage = null;
                     var rotatedMesh = MoveMesh.CopyAndRotateMesh(CurrentMesh, RotationAxis, angle);
                     MoveMesh.CenterMesh(rotatedMesh);
                     LoadMesh(rotatedMesh);
@@ -170,6 +171,7 @@ public abstract partial class BaseViewModel : ObservableObject
                     }
                 }
             }
+            RotateErrorMessage = null;
         }
     }
     

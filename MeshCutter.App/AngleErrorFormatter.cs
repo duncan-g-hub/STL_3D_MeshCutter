@@ -11,7 +11,7 @@ public static class AngleErrorFormatter
 
         return error.Value switch
         {
-            AngleError.AngleNotADegree => "L'angle de rotation doit être un nombre valide.",
+            AngleError.AngleNotANumber => "L'angle de rotation doit être un nombre valide.",
             AngleError.MeshIsNotClosed => "Le modèle doit être fermé pour procéder à une rotation.",
            
             _ => throw new ArgumentOutOfRangeException(nameof(error))
