@@ -171,7 +171,10 @@ public abstract partial class BaseViewModel : ObservableObject
                     }
                 }
             }
-            RotateErrorMessage = null;
+            else 
+            {
+                RotateErrorMessage = null;
+            }
         }
     }
     
