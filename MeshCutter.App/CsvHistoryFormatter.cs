@@ -10,7 +10,7 @@ public static class CsvHistoryFormatter
     public static string Format(IReadOnlyList<PieceHistory> pieces)
     {
         var sb = new StringBuilder();
-        sb.AppendLine("ID;Parent ID;Name;SizeX;SizeY;SizeZ;Triangles;Volume");
+        sb.AppendLine("Piece ID;Parent ID;Name;SizeX;SizeY;SizeZ;Triangles;Volume");
         for (int i = 0; i < pieces.Count; i++)
         {
             var meshInfo = pieces[i].GetInfo();
