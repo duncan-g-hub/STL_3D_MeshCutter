@@ -23,10 +23,11 @@ public class MeshSlicer
         meshCopy.Copy(mesh);
         var cut = new MeshPlaneCut(meshCopy, origin , normal);
         cut.Cut();
-        var filler = new PlanarHoleFiller(cut);
+        
+        var filler = new PlanarHoleFillerCopy(cut);
         if (filler.Fill() == false)
-        {
-            throw new InvalidOperationException($"Filling impossible. FailedInsertions: {filler.FailedInsertions} ; FailedMerges: {filler.FailedMerges} ; OutputHasCracks: {filler.OutputHasCracks}");
+        {   
+            throw new InvalidOperationException($"Filling impossible. FailedInsertions: {filler.FailedInsertions} ; OutputHasCracks: {filler.OutputHasCracks}");
         }
         return meshCopy;
     }
